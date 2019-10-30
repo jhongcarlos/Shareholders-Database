@@ -651,3 +651,21 @@ if (isset($_POST['comp_submit'])) {
         }
     }
 }
+// Company Buttons on index
+if (isset($_POST['comp_delete'])) {
+    $id = $_POST['id'];
+    $query = "UPDATE dbo.tbl_company SET is_deleted = '1' WHERE ID = '$id'";
+    $stmt = sqlsrv_query($db, $query);
+    if ($stmt) {
+        echo "<script>alert('Deleted')</script>";
+    }
+}
+if (isset($_POST['comp_edit'])) {
+    $_SESSION['edit_id_c'] = $_POST['id'];
+    header('Location:edit_company');
+}
+if (isset($_POST['comp_view'])) {
+    $_SESSION['view_id_comp'] = $_POST['id'];
+    $_SESSION['comp_name'] = $_POST['comp_name'];
+    header('Location:view_company?comp_name=' . $_POST['comp_name']);
+}

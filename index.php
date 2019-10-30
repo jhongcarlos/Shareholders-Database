@@ -3,6 +3,12 @@ include('server.php');
 if (empty($_SESSION['mpic_mpic_name'])) {
     header('Location:login');
 }
+// get the percentage
+
+// $num1 = str_replace(',', '', "1,000,000");
+// $num2 = str_replace(',', '', "191,152");
+// $percent = $num2 / $num1;
+// echo $percent_f = number_format($percent * 100,2) . '%';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,23 +38,67 @@ if (empty($_SESSION['mpic_mpic_name'])) {
     <div class="container-fluid"><br>
         <p>Hello, <?= $_SESSION['mpic_mpic_name']; ?></p>
         <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#company">Corporation</a></li>
+            <li class="active"><a data-toggle="tab" href="#company">Company</a></li>
+            <li><a data-toggle="tab" href="#corporation">Corporation</a></li>
             <li><a data-toggle="tab" href="#shareholder">Individual</a></li>
-            <li style="float:right"><button class="btn btn-success"><a href="add_company" style="color:white"><i class="fa fa-plus"> Add Company</i></a></button></li>
         </ul>
         <div class="tab-content">
             <div id="company" class="tab-pane fade in active">
+                <!-- Content -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Company Information</h3>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 style="float:right"><a href="add_company" class="btn btn-success"><i class="fa fa-plus"> Add Company</i></a></h3>
+                    </div>
+                </div>
+                <table id="tbl_company" class="table table-responsive table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Company Name</th>
+                            <th>Registration</th>
+                            <th>Total Shares</th>
+                            <th>Type of Share</th>
+                            <th>Remarks</th>
+                            <th>Last Update</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0'";
+                        $stmt = sqlsrv_query($db, $sql);
+
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                            ?>
+                            <tr>
+                                <td><?= $row['ID'] ?></td>
+                                <td><?= $row['company_name'] ?></td>
+                                <td><span><b>SEC Number: </b></span><?= $row['sec_num'] ?><br><span><b>TIN Number: </b></span><?= $row['tin_num'] ?></td>
+                                <td><?= str_replace('|', '<br />', $row['total_shares']) ?></td>
+                                <td class='sss'><?= str_replace(',', '<br>', $row['type_of_share']) ?></td>
+                                <td><?= str_replace(',', '<br />', $row['remarks']) ?></td>
+                                <td><?= $row['last_update'] ?></td>
+                                <td>
+                                    <form method="POST">
+                                        <input type="hidden" name="id" value="<?= $row['ID']; ?>">
+                                        <input type="hidden" name="comp_name" value="<?= $row['company_name']; ?>">
+                                        <button class="btn btn-primary" name="comp_view" title="View"><i class="fa fa-eye"></i></button>
+                                        <button class="btn btn-warning" name="comp_edit" title="Edit"><i class="fa fa-edit"></i></button>
+                                        <button class="btn btn-danger" name="comp_delete" title="Delete"><i class="fa fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+            <div id="corporation" class="tab-pane fade">
                 <div class="row">
                     <div class="col-md-6">
                         <h3>Corporation Information</h3>
-                        <?php
-                        // get the percentage
-
-                        // $num1 = str_replace(',', '', "1,000,000");
-                        // $num2 = str_replace(',', '', "191,152");
-                        // $percent = $num2 / $num1;
-                        // echo $percent_f = number_format($percent * 100,2) . '%';
-                        ?>
                     </div>
                     <div class="col-md-6">
                         <h3 style="float:right"><a href="add_corporation" class="btn btn-success"><i class="fa fa-plus"> Add Corporation</i></a></h3>
@@ -60,7 +110,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                             <th>ID</th>
                             <th>Corporation Name</th>
                             <th>Registration</th>
-                            <th>Directors / Officers</th>
                             <th>Type of Shares</th>
                             <th>Shares Owned</th>
                             <th>Remarks</th>
@@ -79,7 +128,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                 <td><?= $row['ID'] ?></td>
                                 <td><?= $row['corporation_name'] ?></td>
                                 <td><span><b>SEC Number: </b></span><?= $row['sec_num'] ?><br><span><b>TIN Number: </b></span><?= $row['tin_num'] ?></td>
-                                <td><?= str_replace(',', '<br />', $row['director_officer']) ?></td>
                                 <td><?= str_replace(',', '<br />', $row['type_of_share']) ?></td>
                                 <td class='sss'><?= str_replace('|', '<br>', $row['shares_owned']) ?></td>
                                 <td><?= str_replace(',', '<br />', $row['remarks']) ?></td>
@@ -96,18 +144,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                             </tr>
                         <?php } ?>
                     </tbody>
-                    <!-- <tfoot>
-                        <tr>
-                            <th>ID</th>
-                            <th>Company Name</th>
-                            <th>Registration</th>
-                            <th>Company Affiliation</th>
-                            <th>Held Position</th>
-                            <th>Stocks Owned</th>
-                            <th>Last Update</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot> -->
                 </table>
             </div>
             <div id="shareholder" class="tab-pane fade">

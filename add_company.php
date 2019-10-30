@@ -227,19 +227,22 @@ include('server.php');
                 var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
                 var fieldWrapper = $("<div class=\"row\" id=\"field" + intId + "\"/>");
                 fieldWrapper.data("idx", intId);
-                var aff_com = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><select class='form-control' name='aff_comp[]'>" +
+                var aff_com = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Shareholder Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
                     <?php
-                    $sql = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0'";
+                    $sql = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), corporation_name) ASC";
                     $stmt = sqlsrv_query($db, $sql);
                     echo "'";
                     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                         echo "<option>" . $row['corporation_name'] . "</option>";
                     }
+                    $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
+                    $stmt2 = sqlsrv_query($db, $sql2);
+                    while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                        echo "<option>" . $row['company_name'] . "</option>";
+                    }
                     echo "'";
-                    ?>
-
-                    +
-                    "</select></div>'");
+                    ?> +
+                    "</datalist></div><div class='col-md-1 col-xs-1 col-xl-1 col-sm-1'><a id='add_sh_show' style='display:none' class='btn btn-success'>+</a></div>'");
                 var type_of_shares = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><select name='type_of_shares[]' class='form-control'><option value='0'>- Type of Share -</option><option>Preferred</option><option>Common</option></select></div>");
                 var shares_owned = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input type='text' name='shares_owned[]' class='form-control' placeholder='Shares Owned'/></div>");
                 var remarks = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><textarea name='remarks[]' cols='15' rows='5' class='form-control' placeholder='Remarks'></textarea><hr></div>");
@@ -282,17 +285,27 @@ include('server.php');
                 var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
                 var fieldWrapper = $("<div class=\"row\" id=\"field" + intId + "\"/>");
                 fieldWrapper.data("idx", intId);
-                var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><select class='form-control' name='aff_comp[]' required>" +
+                var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Shareholder Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
                     <?php
-                    $sql = "SELECT * FROM dbo.tbl_corporation";
+                    $sql = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), corporation_name) ASC";
                     $stmt = sqlsrv_query($db, $sql);
                     echo "'";
                     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                         echo "<option>" . $row['corporation_name'] . "</option>";
                     }
+                    $sql1 = "SELECT * FROM dbo.tbl_shareholder WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), first_name) ASC";
+                    $stmt1 = sqlsrv_query($db, $sql1);
+                    while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+                        echo "<option>" . $row['first_name'] . ' ' . $row['last_name'] . "</option>";
+                    }
+                    $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
+                    $stmt2 = sqlsrv_query($db, $sql2);
+                    while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                        echo "<option>" . $row['company_name'] . "</option>";
+                    }
                     echo "'";
                     ?> +
-                    "</select></div>");
+                    "</datalist></div><div class='col-md-1 col-xs-1 col-xl-1 col-sm-1'><a id='add_sh_show' style='display:none' class='btn btn-success'>+</a></div>'");
                 var held_position = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input type='text' name='held_position[]' class='form-control' required placeholder='Held Position'/></div>");
                 var internal_external = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><select name='int_ext[]' class='form-control'><option value='0'>- Internal / External -</option><option>Internal</option><option>External</option></select></div>");
                 var removeButton = $("<div class='col-md-2 col-xs-2 col-xl-2 col-sm-2'><button class='btn btn-danger' style='margin-left:2px;'>-</button></div>");
@@ -350,6 +363,11 @@ include('server.php');
                     $stmt1 = sqlsrv_query($db, $sql1);
                     while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                         echo "<option>" . $row['first_name'] . ' ' . $row['last_name'] . "</option>";
+                    }
+                    $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
+                    $stmt2 = sqlsrv_query($db, $sql2);
+                    while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                        echo "<option>" . $row['company_name'] . "</option>";
                     }
                     echo "'";
                     ?> +

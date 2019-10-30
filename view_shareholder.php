@@ -67,22 +67,39 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                                 // for($i = 0; $i < count($arr); $i++) {
                                                 //     echo $arr[$i];
                                                 // }
-                                                if(!empty($arr)){
+                                                if (!empty($arr)) {
 
-                                                for ($i = 0; $i < count($arr); $i++) {
-                                                    $comp = $arr[$i];
-                                                    $sql1 = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(VARCHAR(MAX), corporation_name) LIKE '$comp'";
-                                                    $stmt1 = sqlsrv_query($db, $sql1);
-                                                    while ($r = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
-                                                        ?>
-                                                <tr>
-                                                    <td><?= $arr[$i] ?></td>
-                                                    <td><?= $arr1[$i]; ?></td>
-                                                    <td><?= $arr2[$i]  ?></td>
-                                                    <td><a href='view_corporation.php?corp_name=<?= $arr[$i] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
-                                                </tr>
-                                        <?php }
-                                                } } ?>
+                                                    for ($i = 0; $i < count($arr); $i++) {
+                                                        $comp = $arr[$i];
+                                                        $sql1 = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(VARCHAR(MAX), corporation_name) LIKE '$comp'";
+                                                        $stmt1 = sqlsrv_query($db, $sql1);
+                                                        while ($r = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+                                                            ?>
+                                                    <tr>
+                                                        <td><?= $arr[$i] ?></td>
+                                                        <td><?= $arr1[$i]; ?></td>
+                                                        <td><?= $arr2[$i]  ?></td>
+                                                        <td><a href='view_corporation.php?corp_name=<?= $arr[$i] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
+                                                    </tr>
+                                        <?php       }
+                                                    }
+                                                    // Company
+                                                    for ($i = 0; $i < count($arr); $i++) {
+                                                        $comp = $arr[$i];
+                                                        $sql1 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(VARCHAR(MAX), company_name) LIKE '$comp'";
+                                                        $stmt1 = sqlsrv_query($db, $sql1);
+                                                        while ($r = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+                                                            ?>
+                                                    <tr>
+                                                        <td><?= $arr[$i] ?></td>
+                                                        <td><?= $arr1[$i]; ?></td>
+                                                        <td><?= $arr2[$i]  ?></td>
+                                                        <td><a href='view_company.php?comp_name=<?= $arr[$i] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
+                                                    </tr>
+                                        <?php       }
+                                                    }
+                                                    // End of company
+                                                } ?>
                                     </tbody>
                                 </table>
                             </div>
