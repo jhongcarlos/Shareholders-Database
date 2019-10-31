@@ -661,11 +661,84 @@ if (isset($_POST['comp_delete'])) {
     }
 }
 if (isset($_POST['comp_edit'])) {
-    $_SESSION['edit_id_c'] = $_POST['id'];
+    $_SESSION['edit_id_comp'] = $_POST['id'];
     header('Location:edit_company');
 }
 if (isset($_POST['comp_view'])) {
     $_SESSION['view_id_comp'] = $_POST['id'];
     $_SESSION['comp_name'] = $_POST['comp_name'];
     header('Location:view_company?comp_name=' . $_POST['comp_name']);
+}
+if(isset($_POST['edit_company_submit'])){
+    // constants
+    $id = $_POST['id'];
+    $comp_name = $_POST['comp_name'];
+    $sec_num = $_POST['sec_num'];
+    $tin_num = $_POST['tin_num'];
+    $address = $_POST['address'];
+    $total_shares = $_POST['total_shares'];
+
+    // array variables
+    $dir_off = $_POST['dir_off'];
+    $do_position = $_POST['do_position'];
+    $aff_comp = $_POST['aff_comp'];
+    $type_of_shares = $_POST['type_of_shares'];
+    $shares_owned = $_POST['shares_owned'];
+    $remarks = $_POST['remarks'];
+
+    // handlers
+    $dir_off_h = "";
+    $do_position_h = "";
+    $aff_comp_h = "";
+    $type_of_shares_h = "";
+    $shares_owned_h = "";
+    $remarks_h = "";
+
+    foreach ($dir_off as $key => $value) {
+        if ($dir_off_h) $dir_off_h .= ',';
+        $dir_off_h .= $value;
+    }
+    foreach ($do_position as $key => $value) {
+        if ($do_position_h) $do_position_h .= ',';
+        $do_position_h .= $value;
+    }
+    foreach ($aff_comp as $key => $value) {
+        if ($aff_comp_h) $aff_comp_h .= ',';
+        $aff_comp_h .= $value;
+    }
+    foreach ($type_of_shares as $key => $value) {
+        if ($type_of_shares_h) $type_of_shares_h .= ',';
+        $type_of_shares_h .= $value;
+    }
+    foreach ($shares_owned as $key => $value) {
+        if ($shares_owned_h) $shares_owned_h .= '|';
+        $shares_owned_h .= $value;
+    }
+    foreach ($remarks as $key => $value) {
+        if ($remarks_h) $remarks_h .= ',';
+        $remarks_h .= $value;
+    }
+    $query = "UPDATE dbo.tbl_company 
+    SET 
+    company_name = '$comp_name',
+    sec_num = '$sec_num',
+    tin_num = '$tin_num',
+    total_shares = '$total_shares',
+    address = '$address',
+    company_affiliation = '$aff_comp_h',
+    director_officer = '$dir_off_h',
+    do_position = '$do_position_h',
+    shares_owned = '$shares_owned_h',
+    type_of_share = '$type_of_shares_h',
+    remarks = '$remarks_h',
+    last_update = '$datetime'
+    WHERE ID = $id";
+    $stmt = sqlsrv_query($db, $query);
+    if ($stmt) {
+        $msg = "
+        <div class='alert alert-success'>
+         Data has been updated
+        </div>
+        ";
+    }
 }

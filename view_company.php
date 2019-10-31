@@ -40,7 +40,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
             
             $id = $_SESSION['view_id_comp'];
             $comp_name = "$_GET[comp_name]";
-            $sql = "SELECT * FROM dbo.tbl_shareholder WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '$comp_name' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
+            $sql = "SELECT * FROM dbo.tbl_shareholder WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '%$comp_name%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
             $stmt = sqlsrv_query($db, $sql);
         }
         ?>
@@ -103,7 +103,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                         }
                                         ?>
                                     <?php
-                                        $sql1 = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '$comp_name' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
+                                        $sql1 = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '%$comp_name%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
                                         $stmt1 = sqlsrv_query($db, $sql1);
                                         while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                                             $arr = explode(",", $row['ID']);

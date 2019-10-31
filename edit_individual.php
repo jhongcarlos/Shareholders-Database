@@ -75,7 +75,29 @@ include('server.php');
                                     <div class="row">
                                         <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
                                             <label for="aff_comp">Company Affiliation</label>
-                                            <input type="text" name="aff_comp[]" class="form-control" value="<?= $company_affiliation[$i] ?>">
+                                            <!-- <input type="text" name="aff_comp[]" class="form-control" value="<?= $company_affiliation[$i] ?>"> -->
+                                            <input class='form-control' value="<?= $company_affiliation[$i] ?>" list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'>
+                                        <datalist id='sh_list_result'>
+                                            <?php
+                                                    $sql = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), corporation_name) ASC";
+                                                    $stmt = sqlsrv_query($db, $sql);
+                                                    echo "'";
+                                                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                                        echo "<option>" . $row['corporation_name'] . "</option>";
+                                                    }
+                                                    $sql1 = "SELECT * FROM dbo.tbl_shareholder WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), first_name) ASC";
+                                                    $stmt1 = sqlsrv_query($db, $sql1);
+                                                    while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+                                                        echo "<option>" . $row['first_name'] . ' ' . $row['last_name'] . "</option>";
+                                                    }
+                                                    $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
+                                                    $stmt2 = sqlsrv_query($db, $sql2);
+                                                    while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                                                        echo "<option>" . $row['company_name'] . "</option>";
+                                                    }
+                                                    echo "'";
+                                                    ?>
+                                        </datalist>
                                         </div>
                                     </div>
                                 </div>

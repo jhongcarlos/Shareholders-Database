@@ -40,7 +40,6 @@ function fetch_data()
   }
   $sql1 = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(VARCHAR(MAX), is_deleted) = '0'";
   $stmt1 = sqlsrv_query($db, $sql1);
-  $companies = array();
 
   while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     if (strpos($row['company_affiliation'], $corp_name) !== false) {
@@ -48,7 +47,6 @@ function fetch_data()
       $arr2 = explode("|", $row['shares_owned']);
       $arr3 = explode(",", $row['company_affiliation']);
 
-      $companies[] = $row['corporation_name'];
       $position = "";
       foreach ($arr3 as $key => $value) {
         if ($value == $corp_name) {
@@ -64,32 +62,28 @@ function fetch_data()
                 </tr>';
     }
   }
-  foreach ($companies as $k => $v) {
-    $arr = explode(",", $v);
-    foreach ($arr as $key => $value) {
-      $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '%$value%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
-      $stmt = sqlsrv_query($db, $sql);
-      while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-        $arr = explode(",", $row['ID']);
-        $arr1 = explode(",", $row['type_of_share']);
-        $arr2 = explode("|", $row['shares_owned']);
-        $arr3 = explode(",", $row['company_affiliation']);
-        $position = "";
-        foreach ($arr3 as $key => $value) {
-          // if ($value == $_GET['corp_name']) {
-          $position = $key;
-          // echo $key;
-          // }
-        }
-        $output .= '
+  // $output .= $corp_name;
+  $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '%$corp_name%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
+  $stmt = sqlsrv_query($db, $sql);
+  while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+    $arr = explode(",", $row['ID']);
+    $arr1 = explode(",", $row['type_of_share']);
+    $arr2 = explode("|", $row['shares_owned']);
+    $arr3 = explode(",", $row['company_affiliation']);
+    $position = "";
+    foreach ($arr3 as $key => $value) {
+      // if ($value == $_GET['corp_name']) {
+      $position = $key;
+      // echo $key;
+      // }
+    }
+    $output .= '
         <tr>
           <td>' . $row['ID'] . '</td>
           <td>' . $row['company_name'] . '</td>
           <td>' . $arr1[$position] . '</td>
           <td>' . $arr2[$position] . '</td>
         </tr>';
-      }
-    }
   }
 
   $output .= '
@@ -168,7 +162,7 @@ function comp_fetch_data()
     }
   }
   // =======
-  $sql1 = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(VARCHAR(MAX), company_affiliation) = '$comp_name' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
+  $sql1 = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '%$comp_name%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
   $stmt1 = sqlsrv_query($db, $sql1);
   while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     $arr = explode(",", $row['type_of_share']);

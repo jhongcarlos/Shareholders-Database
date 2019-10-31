@@ -9,7 +9,7 @@ include('server.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <?php include('partial/header.php'); ?>
-    <title>Edit Corporation - Metro Pacific Investment Corporation</title>
+    <title>Edit Company - Metro Pacific Investment Corporation</title>
     <style>
         .logo {
             display: block;
@@ -32,15 +32,15 @@ include('server.php');
             <div class="col-sm-8 col-sm-offset-2 well">
                 <div class="col-sm-12 form-legend">
                     <a href="index">← Home</a>
-                    <h2>Edit Corporation</h2>
+                    <h2>Edit Company</h2>
                     <?= $msg; ?>
                     <hr>
                 </div>
                 <div class="col-sm-12 form-column">
                     <form method="post" enctype="multipart/form-data">
                         <?php
-                        $id = $_SESSION['edit_id_c'];
-                        $sql = "SELECT * FROM dbo.tbl_corporation WHERE ID = $id";
+                        $id = $_SESSION['edit_id_comp'];
+                        $sql = "SELECT * FROM dbo.tbl_company WHERE ID = $id";
                         $stmt = sqlsrv_query($db, $sql);
                         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 
@@ -54,9 +54,9 @@ include('server.php');
                             ?>
                             <div class="row">
                                 <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
-                                    <label for="f_name">Corporation Name</label>
+                                    <label for="f_name">Company Name</label>
                                     <input type="hidden" name="id" value="<?= $row['ID'] ?>">
-                                    <input type="text" name="corp_name" class="form-control" required value="<?= $row['corporation_name'] ?>">
+                                    <input type="text" name="comp_name" class="form-control" required value="<?= $row['company_name'] ?>">
                                 </div>
                             </div>
                             <div class="row">
@@ -71,6 +71,12 @@ include('server.php');
                             </div>
                             <div class="row">
                                 <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
+                                    <label for="f_name">Total Number of Shares</label>
+                                    <input type="text" name="total_shares" class="form-control" required value="<?= $row['total_shares'] ?>">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
                                     <label for="f_name">Address</label>
                                     <textarea name="address" class="form-control" cols="5" rows="5"><?= $row['address'] ?></textarea>
                                 </div>
@@ -78,37 +84,36 @@ include('server.php');
                             <!-- Start of for loop -->
                             <?php
                                 for ($i = 0; $i < count($company_affiliation); $i++) {
-                                    if(empty($director_officer[$i])){
+                                    if (empty($director_officer[$i])) {
                                         ?>
-                                        <div class="row">
-                                    <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
-                                        <label for="f_name">Directors/Officers</label>
-                                        <input type="text" name="dir_off[]" class="form-control" required value="">
+                                    <div class="row">
+                                        <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
+                                            <label for="f_name">Directors/Officers</label>
+                                            <input type="text" name="dir_off[]" class="form-control" required value="">
+                                        </div>
+                                        <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
+                                            <label for='f_name'>Position</label>
+                                            <input type="text" name="do_position[]" class="form-control" required value="">
+                                        </div>
                                     </div>
-                                    <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
-                                        <label for='f_name'>Position</label>
-                                        <input type="text" name="do_position[]" class="form-control" required value="">
+                                <?php
+                                        } else {
+                                            ?>
+                                    <div class="row">
+                                        <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
+                                            <label for="f_name">Directors/Officers</label>
+                                            <input type="text" name="dir_off[]" class="form-control" required value="<?= $director_officer[$i] ?>">
+                                        </div>
+                                        <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
+                                            <label for='f_name'>Position</label>
+                                            <input type="text" name="do_position[]" class="form-control" required value="<?= $do_position[$i] ?>">
+                                        </div>
                                     </div>
-                                </div>
-                                        <?php
-                                    }
-                                        else{
-                                    ?>
-                                <div class="row">
-                                    <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
-                                        <label for="f_name">Directors/Officers</label>
-                                        <input type="text" name="dir_off[]" class="form-control" required value="<?= $director_officer[$i] ?>">
-                                    </div>
-                                    <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
-                                        <label for='f_name'>Position</label>
-                                        <input type="text" name="do_position[]" class="form-control" required value="<?= $do_position[$i] ?>">
-                                    </div>
-                                </div>
-                                        <?php } ?>
+                                <?php } ?>
                                 <div class="row">
                                     <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
                                         <label for='f_name'>Company Affiliation</label>
-                                        <!-- <input type="text" name="aff_comp[]" class="form-control" required value="<?= $company_affiliation[$i] ?>"> -->
+                                        <!-- <input type="text" autocomplete="off" name="aff_comp[]" class="form-control" required value="<?= $company_affiliation[$i] ?>"> -->
                                         <input class='form-control' value="<?= $company_affiliation[$i] ?>" list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'>
                                         <datalist id='sh_list_result'>
                                             <?php
@@ -155,7 +160,7 @@ include('server.php');
                                 <div id="add_user"></div>
                                 <input type="button" class="a_add btn btn-success" value="+" id="edit_corp_add" style="margin-top:3px" />
                             </div>
-                            <button class="btn btn-primary" name="edit_corporation_submit">Submit</button>
+                            <button class="btn btn-primary" name="edit_company_submit">Submit</button>
                         <?php } ?>
                     </form>
                 </div>

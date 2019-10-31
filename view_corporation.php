@@ -38,7 +38,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
         <?php
         if (empty($_GET)) { } else {
             // view_id_corp
-            $id = $_SESSION['view_id_corp'];
+            // $id = $_SESSION['view_id_corp'];
             $corp_name = "$_GET[corp_name]";
             $sql = "SELECT * FROM dbo.tbl_shareholder WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '$corp_name' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
             $stmt = sqlsrv_query($db, $sql);
@@ -126,36 +126,32 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             <td><?= $arr2[$position] ?></td>
                                             <td><a href='view_corporation.php?corp_name=<?= $row['corporation_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
                                         </tr>
-                                        <?php
-                                            }
-                                            // print_r($companies);
-                                            foreach ($companies as $k => $v) {
-                                                $arr = explode(",", $v);
-                                                foreach ($arr as $key => $value) {
-                                                    $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '%$value%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
-                                                    $stmt = sqlsrv_query($db, $sql);
-                                                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                                        $arr = explode(",", $row['ID']);
-                                                        $arr1 = explode(",", $row['type_of_share']);
-                                                        $arr2 = explode("|", $row['shares_owned']);
-                                                        $arr3 = explode(",", $row['company_affiliation']);
-                                                        $position = "";
-                                                        foreach ($arr3 as $key => $value) {
-                                                            // if ($value == $_GET['corp_name']) {
-                                                                $position = $key;
-                                                                // echo $key;
-                                                            // }
-                                                        }
-                                                        ?>
-                                                <tr>
-                                                    <td><?= $row['company_name'] ?></td>
-                                                    <td><?= $arr1[$position] ?></td>
-                                                    <td><?= $arr2[$position] ?></td>
-                                                    <td><a href='view_company.php?comp_name=<?= $row['company_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
-                                                </tr>
-                                <?php
-                                            }
+                                    <?php
                                         }
+                                        // print_r($companies);
+                                        $corp_name = "$_GET[corp_name]";
+                                        $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '%$corp_name%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
+                                        $stmt = sqlsrv_query($db, $sql);
+                                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                            $arr = explode(",", $row['ID']);
+                                            $arr1 = explode(",", $row['type_of_share']);
+                                            $arr2 = explode("|", $row['shares_owned']);
+                                            $arr3 = explode(",", $row['company_affiliation']);
+                                            $position = "";
+                                            foreach ($arr3 as $key => $value) {
+                                                // if ($value == $_GET['corp_name']) {
+                                                $position = $key;
+                                                // echo $key;
+                                                // }
+                                            }
+                                            ?>
+                                        <tr>
+                                            <td><?= $row['company_name'] ?></td>
+                                            <td><?= $arr1[$position] ?></td>
+                                            <td><?= $arr2[$position] ?></td>
+                                            <td><a href='view_company.php?comp_name=<?= $row['company_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
+                                        </tr>
+                                <?php
                                     }
                                 } ?>
                             </tbody>
