@@ -105,19 +105,9 @@ include('server.php');
                     var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
                     var fieldWrapper = $("<div class=\"row\" id=\"field" + intId + "\"/>");
                     fieldWrapper.data("idx", intId);
-                    var aff_com = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Shareholder Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
+                    var aff_com = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Company Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
                         <?php
-                        $sql = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), corporation_name) ASC";
-                        $stmt = sqlsrv_query($db, $sql);
                         echo "'";
-                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                            echo "<option>" . $row['corporation_name'] . "</option>";
-                        }
-                        $sql1 = "SELECT * FROM dbo.tbl_shareholder WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), first_name) ASC";
-                        $stmt1 = sqlsrv_query($db, $sql1);
-                        while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
-                            echo "<option>" . $row['first_name'] . ' ' . $row['last_name'] . "</option>";
-                        }
                         $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
                         $stmt2 = sqlsrv_query($db, $sql2);
                         while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {

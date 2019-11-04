@@ -104,7 +104,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                         <h3 style="float:right"><a href="add_corporation" class="btn btn-success"><i class="fa fa-plus"> Add Corporation</i></a></h3>
                     </div>
                 </div>
-                <table id="tbl_company" class="table table-responsive table-hover" style="width:100%">
+                <table id="tbl_corp" class="table table-responsive table-hover" style="width:100%">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -160,7 +160,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Company Affiliation</th>
                             <th>Internal / External</th>
                             <th>Held Position</th>
                             <th>Shares Owned</th>
@@ -180,7 +179,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                             <tr>
                                 <td><?= $row['ID'] ?></td>
                                 <td><?= $row['first_name'] . ' ' . $row['last_name'] ?></td>
-                                <td><?= str_replace(',', '<br />', $row['company_affiliation']) ?></td>
                                 <td><?= str_replace(',', '<br />', $row['internal_external']) ?></td>
                                 <td><?= str_replace(',', '<br />', $row['held_position']) ?></td>
                                 <td><?= str_replace('|', '<br />', $row['shares_owned']) ?></td>
@@ -229,6 +227,12 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                 // ]
             });
             $('#tbl_shareholder').DataTable({
+                // dom: 'Bfrtip',
+                // buttons: [
+                //     'copy', 'csv', 'excel', 'pdf', 'print'
+                // ]
+            });
+            $('#tbl_corp').DataTable({
                 // dom: 'Bfrtip',
                 // buttons: [
                 //     'copy', 'csv', 'excel', 'pdf', 'print'

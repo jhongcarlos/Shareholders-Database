@@ -3,7 +3,12 @@ include('../server.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
+<!-- <style>
+ [node-id='1'] rect {
+        fill: #456;
+    }
 
+</style> -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +22,7 @@ include('../server.php');
 
 <body>
 
-        <div id="people" style="height:100%;width:100%"></div>
+    <div id="people" style="height:100%;width:100%"></div>
     <script>
         $(document).ready(function(e) {
 
@@ -28,7 +33,7 @@ include('../server.php');
 
         });
         var chart = new OrgChart(document.getElementById("people"), {
-            mouseScrool: OrgChart.action.none,
+            // mouseScrool: OrgChart.action.none,
             menu: {
                 pdf: {
                     text: "Export PDF"
@@ -49,8 +54,17 @@ include('../server.php');
             },
             nodes: [
                 <?php
-                $sql = "SELECT * FROM dbo.tbl_company";
-                $stmt = sqlsrv_query($db, $sql);
+                $sql = "";
+                $stmt = "";
+                if (empty($_GET)) {
+                    $sql = "SELECT * FROM dbo.tbl_company";
+                    $stmt = sqlsrv_query($db, $sql);
+                } else {
+                    $cat = $_GET['cat'];
+                    $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
+                    $stmt = sqlsrv_query($db, $sql);
+                }
+
 
                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                     $par_id = "";
@@ -59,13 +73,13 @@ include('../server.php');
                     } else {
                         $par_id = $row['parent_id'];
                     }
-                    ?>  {
+                    ?> {
                         id: <?= $row['ID'] ?>,
                         pid: <?= $row['parent_id'] ?>,
                         name: '<?= $row['company_name'] ?>',
                         TotalShare: '<?= $row['total_shares'] ?>',
                         Address: '<?= $row['address'] ?>',
-                        },
+                    },
                 <?php
                 }
                 ?>

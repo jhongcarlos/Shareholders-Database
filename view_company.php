@@ -37,7 +37,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
         </div>
         <?php
         if (empty($_GET)) { } else {
-            
+
             $id = $_SESSION['view_id_comp'];
             $comp_name = "$_GET[comp_name]";
             $sql = "SELECT * FROM dbo.tbl_shareholder WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '%$comp_name%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
@@ -68,9 +68,10 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                         </div>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="tbl_comp">
                             <thead>
                                 <th>Shareholder Name</th>
+                                <th>Type</th>
                                 <th>Type of Share</th>
                                 <th>Shares Owned</th>
                                 <th>Action</th>
@@ -95,6 +96,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                         ?>
                                         <tr>
                                             <td><?= $row['first_name'] . " " . $row['last_name']; ?></td>
+                                            <td>Individual</td>
                                             <td><?= $arr1[$position] ?></td>
                                             <td><?= $arr2[$position] ?></td>
                                             <td><a href="view_shareholder.php?sh_id=<?= $row['ID'] ?>" class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
@@ -118,33 +120,13 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             } ?>
                                         <tr>
                                             <td><?= $row['corporation_name'] ?></td>
+                                            <td>Corporation</td>
                                             <td><?= $arr1[$position] ?></td>
                                             <td><?= $arr2[$position] ?></td>
                                             <td><a href='view_corporation.php?corp_name=<?= $row['corporation_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
                                         </tr>
-                                <?php
-                                    }
-                                    $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '$comp_name' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
-                                        $stmt2 = sqlsrv_query($db, $sql2);
-                                        while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
-                                            $arr = explode(",", $row['ID']);
-                                            $arr1 = explode(",", $row['type_of_share']);
-                                            $arr2 = explode("|", $row['shares_owned']);
-                                            $arr3 = explode(",", $row['company_affiliation']);
-                                            $position = "";
-                                            foreach ($arr3 as $key => $value) {
-                                                if ($value == $_GET['comp_name']) {
-                                                    $position = $key;
-                                                }
-                                            } ?>
-                                        <tr>
-                                            <td><?= $row['company_name'] ?></td>
-                                            <td><?= $arr1[$position] ?></td>
-                                            <td><?= $arr2[$position] ?></td>
-                                            <td><a href='view_company.php?comp_name=<?= $row['company_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
-                                        </tr>
-                                <?php
-                                    }
+                                    <?php
+                                        }
                                 } ?>
                             </tbody>
                         </table>
@@ -153,6 +135,17 @@ if (empty($_SESSION['mpic_mpic_name'])) {
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#tbl_comp').DataTable({
+                // dom: 'Bfrtip',
+                // buttons: [
+                //     'copy', 'csv', 'excel', 'pdf', 'print'
+                // ]
+            });
+        });
+    </script>
+    <?php include('partial/index_footer.php'); ?>
 </body>
 
 </html>

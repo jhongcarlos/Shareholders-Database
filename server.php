@@ -540,20 +540,22 @@ if (isset($_POST['comp_submit'])) {
     $c_name = $_POST['co_name'];
     $sec_num = $_POST['sec_num'];
     $tin_num = $_POST['tin_num'];
+    $category = $_POST['category'];
     $address = $_POST['address'];
     $total_num_shares = $_POST['total_num_shares'];
 
     if (empty($_POST['aff_comp'])) {
         // Query here
         $sql = "INSERT INTO dbo.tbl_company(company_name,
-        sec_num,tin_num,total_shares,[address],last_update,parent_id,is_deleted)
+        sec_num,tin_num,total_shares,category,[address],last_update,parent_id,is_deleted)
                 VALUES('$c_name',
                 '$sec_num',
                 '$tin_num',
                 '$total_num_shares',
+                '$category',
                 '$address',
                 '$datetime',
-                '4',
+                '19',
                 '0')";
         $stmt = sqlsrv_query($db, $sql);
         if ($stmt) {
@@ -634,6 +636,7 @@ if (isset($_POST['comp_submit'])) {
                 '$sec_num',
                 '$tin_num',
                 '$total_num_shares',
+                '$category',
                 '$address',
                 '$aff_com_h',
                 '$dir_off_h',

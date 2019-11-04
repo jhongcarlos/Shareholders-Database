@@ -68,9 +68,10 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                         </div>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="tbl_corp">
                             <thead>
                                 <th>Shareholder Name</th>
+                                <th>Type</th>
                                 <th>Type of Share</th>
                                 <th>Shares Owned</th>
                                 <th>Action</th>
@@ -78,59 +79,23 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                             <tbody>
                                 <?php
                                 if (empty($_GET)) { } else {
-                                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                        $arr = explode(",", $row['ID']);
-                                        $arr1 = explode(",", $row['type_of_shares']);
-                                        $arr2 = explode("|", $row['shares_owned']);
+                                    $companies = array();
+                                    $sql1 = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(VARCHAR(MAX), corporation_name) LIKE '%$corp_name%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
+                                    $stmt1 = sqlsrv_query($db, $sql1);
+                                    while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                                         $arr3 = explode(",", $row['company_affiliation']);
-                                        $position = "";
+                                        $position = 0;
                                         foreach ($arr3 as $key => $value) {
                                             if ($value == $_GET['corp_name']) {
                                                 $position = $key;
+                                                // echo $key;
                                             }
+                                            $companies[] = $value;
                                         }
-
-
-                                        // for ($i = 0; $i < count($arr); $i++) {
-                                        ?>
-                                        <tr>
-                                            <td><?= $row['first_name'] . " " . $row['last_name']; ?></td>
-                                            <td><?= $arr1[$position] ?></td>
-                                            <td><?= $arr2[$position] ?></td>
-                                            <td><a href="view_shareholder.php?sh_id=<?= $row['ID'] ?>" class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
-                                        </tr>
-                                    <?php
-                                        }
-                                        ?>
-                                    <?php
-                                        $sql1 = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '%$corp_name%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
-                                        $stmt1 = sqlsrv_query($db, $sql1);
-                                        $companies = array();
-                                        while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
-                                            $arr = explode(",", $row['ID']);
-                                            $arr1 = explode(",", $row['type_of_share']);
-                                            $arr2 = explode("|", $row['shares_owned']);
-                                            $arr3 = explode(",", $row['company_affiliation']);
-                                            $position = 0;
-                                            foreach ($arr3 as $key => $value) {
-                                                if ($value == $_GET['corp_name']) {
-                                                    $position = $key;
-                                                    // echo $key;
-                                                }
-                                            }
-                                            $companies[] = $row['corporation_name'];
-                                            ?>
-                                        <tr>
-                                            <td><?= $row['corporation_name'] ?></td>
-                                            <td><?= $arr1[$position] ?></td>
-                                            <td><?= $arr2[$position] ?></td>
-                                            <td><a href='view_corporation.php?corp_name=<?= $row['corporation_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
-                                        </tr>
-                                    <?php
-                                        }
-                                        // print_r($companies);
+                                    }
+                                    foreach ($companies as $k => $v) {
                                         $corp_name = "$_GET[corp_name]";
-                                        $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(VARCHAR(MAX), company_affiliation) LIKE '%$corp_name%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
+                                        $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(VARCHAR(MAX), company_name) LIKE '%$v%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
                                         $stmt = sqlsrv_query($db, $sql);
                                         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                             $arr = explode(",", $row['ID']);
@@ -139,19 +104,18 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             $arr3 = explode(",", $row['company_affiliation']);
                                             $position = "";
                                             foreach ($arr3 as $key => $value) {
-                                                // if ($value == $_GET['corp_name']) {
                                                 $position = $key;
-                                                // echo $key;
-                                                // }
                                             }
                                             ?>
-                                        <tr>
-                                            <td><?= $row['company_name'] ?></td>
-                                            <td><?= $arr1[$position] ?></td>
-                                            <td><?= $arr2[$position] ?></td>
-                                            <td><a href='view_company.php?comp_name=<?= $row['company_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
-                                        </tr>
+                                            <tr>
+                                                <td><?= $row['company_name'] ?></td>
+                                                <td>Company</td>
+                                                <td><?= $arr1[$position] ?></td>
+                                                <td><?= $arr2[$position] ?></td>
+                                                <td><a href='view_company.php?comp_name=<?= $row['company_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
+                                            </tr>
                                 <?php
+                                        }
                                     }
                                 } ?>
                             </tbody>
@@ -161,6 +125,17 @@ if (empty($_SESSION['mpic_mpic_name'])) {
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#tbl_corp').DataTable({
+                // dom: 'Bfrtip',
+                // buttons: [
+                //     'copy', 'csv', 'excel', 'pdf', 'print'
+                // ]
+            });
+        });
+    </script>
+    <?php include('partial/index_footer.php'); ?>
 </body>
 
 </html>
