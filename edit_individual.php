@@ -105,7 +105,20 @@ include('server.php');
                                     <div class="row">
                                         <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
                                             <label for="internal_external">Internal / External</label>
-                                            <input type="text" name="internal_external[]" class="form-control" value="<?= $internal_external[$i] ?>">
+                                            <!-- <input type="text" name="internal_external[]" class="form-control" value="<?= $internal_external[$i] ?>"> -->
+                                            <select name="internal_external[]" class="form-control" required>
+                                            <?php
+                                                    if ($internal_external[$i] == "Internal") { ?>
+                                                <option selected>Internal</option>
+                                                <option>External</option>
+                                            <?php
+                                                    } else { ?>
+                                                <option>Internal</option>
+                                                <option selected>External</option>
+                                            <?php
+                                                    }
+                                                    ?>
+                                        </select>
                                         </div>
                                     </div>
                                 </div>
@@ -124,8 +137,21 @@ include('server.php');
                                             <input type="text" name="shares_owned[]" class="form-control" value="<?= $shares_owned[$i] ?>">
                                         </div>
                                         <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
-                                            <label for="type_of_shares">Type of Shares <span style="color:red">- Common / Preferred</span></label>
-                                            <input type="text" name="type_of_shares[]" class="form-control" value="<?= $type_of_shares[$i] ?>">
+                                            <label for="type_of_shares">Type of Shares</label>
+                                            <!-- <input type="text" name="type_of_shares[]" class="form-control" value="<?= $type_of_shares[$i] ?>"> -->
+                                            <select name="type_of_shares[]" class="form-control" required>
+                                            <?php
+                                                    if ($type_of_shares[$i] == "Common") { ?>
+                                                <option selected>Common</option>
+                                                <option>Preffered</option>
+                                            <?php
+                                                    } else { ?>
+                                                <option>Common</option>
+                                                <option selected>Preffered</option>
+                                            <?php
+                                                    }
+                                                    ?>
+                                        </select>
                                         </div>
                                     </div>
                                 </div>
@@ -169,17 +195,17 @@ include('server.php');
                     var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
                     var fieldWrapper = $("<div class=\"row\" id=\"field" + intId + "\"/>");
                     fieldWrapper.data("idx", intId);
-                    var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><select class='form-control' name='aff_comp[]' required>" +
-                        <?php
-                        $sql = "SELECT * FROM dbo.tbl_corporation";
-                        $stmt = sqlsrv_query($db, $sql);
-                        echo "'";
-                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                            echo "<option>" . $row['corporation_name'] . "</option>";
-                        }
-                        echo "'";
-                        ?> +
-                        "</select></div>");
+                    var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Company Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
+                    <?php
+                    echo "'";
+                    $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
+                    $stmt2 = sqlsrv_query($db, $sql2);
+                    while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                        echo "<option>" . $row['company_name'] . "</option>";
+                    }
+                    echo "'";
+                    ?> +
+                    "</datalist></div><div class='col-md-1 col-xs-1 col-xl-1 col-sm-1'><a id='add_sh_show' style='display:none' class='btn btn-success'>+</a></div>'");
                     var held_position = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input type='text' name='held_position[]' class='form-control' required placeholder='Held Position'/></div>");
                     var internal_external = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><select name='int_ext[]' class='form-control'><option value='0'>- Internal / External -</option><option>Internal</option><option>External</option></select></div>");
                     var removeButton = $("<div class='col-md-2 col-xs-2 col-xl-2 col-sm-2'><button class='btn btn-danger' style='margin-left:2px;'>-</button></div>");

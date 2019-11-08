@@ -23,16 +23,21 @@
         .fa:hover {
             font-size: 20px;
         }
+
+        .primarycolor {
+            color: #456;
+        }
     </style>
 </head>
 
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h2 class="display-4 text-center text-white">Lorem Ipsum</h2>
+            <h2 class="display-4 text-center text-white">OUR COMPANY</h2>
         </div>
     </div>
     <div class="container">
+        <h4 class="text-center primarycolor">CORE ASSETS – SIMPLIFIED OWNERSHIP STRUCTURE</h4><br>
         <div class="row">
             <div class="col-md-3">
                 <div class="card text-white" style="border-color:#d35400">
@@ -142,7 +147,13 @@
                 </div>
             </div>
             <!-- <div class="col-md-3"></div> -->
-        </div>
+        </div><br><br>
+        <h3 class="text-center primarycolor">Lorem Ipsum</h3><br>
+        <p class="primarycolor">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent semper, dolor a vestibulum vulputate, nibh nibh ullamcorper nulla, id malesuada enim nisi vitae elit. Cras vehicula ac eros in tempus. Morbi a aliquet elit, sed gravida ex. Suspendisse non eleifend dolor, sit amet lacinia massa. Curabitur non leo quam. Integer varius, quam ac luctus egestas, arcu sem pharetra augue, nec viverra justo risus a ante. Pellentesque accumsan lacus sed libero eleifend ultricies.
+            <br><br>
+            Sed et nibh orci. Donec eget ipsum pellentesque, tincidunt ex at, cursus justo. In euismod dignissim est ac pellentesque. Aliquam commodo est sed condimentum tristique. Vestibulum est metus, finibus a ligula et, feugiat lobortis lacus. Cras commodo mi et odio dictum, at tincidunt leo finibus. Quisque volutpat semper eros, nec viverra ipsum condimentum non. Sed vestibulum et justo sit amet auctor. Sed efficitur nisl id lorem ultrices lobortis. In volutpat lorem vel elementum egestas. Pellentesque tristique interdum justo, nec tempus lorem vulputate eget. In hac habitasse platea dictumst.
+            <br><br>
+            Cras accumsan fringilla hendrerit. Praesent facilisis turpis id aliquet porta. Proin sed tempus quam. Quisque commodo egestas feugiat. Vivamus vulputate felis vel nisi faucibus tempus. Aliquam at massa elementum, tristique lectus vitae, laoreet enim. Fusce ut nibh eros. Aliquam erat volutpat.
     </div>
     <?php include('partial/index_footer.php'); ?>
 </body>

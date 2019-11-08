@@ -81,11 +81,30 @@ include('server.php');
                                 <option>Water</option>
                                 <option>Rail</option>
                                 <option>Logistics</option>
-                                <option>Tollways</option> 
+                                <option>Tollways</option>
                                 <option>Hospital</option>
                                 <option>Others</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="f_name">Internal / External *</label>
+                            <select name="int_ext" class="form-control" required>
+                                <option>-- Select --</option>
+                                <option>Internal</option>
+                                <option>External</option>
+                            </select>
+                        </div>
+                        <label for="f_name">Parent Name *</label>
+                        <input class='form-control' list='comp_list_res' name='parent_id' id='comp_list'>
+                        <datalist id='comp_list_res'>
+                            <?php
+                            $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
+                            $stmt2 = sqlsrv_query($db, $sql2);
+                            while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                                echo "<option value='" . $row['ID'] . "'>" . $row['company_name'] . "</option>";
+                            }
+                            ?>
+                        </datalist>
                         <div class="form-group">
                             <label for="address">Address *</label>
                             <textarea name="address" required class="form-control" required cols="15" rows="5"></textarea>
@@ -93,12 +112,12 @@ include('server.php');
                         <div class="form-group">
                             <label>Registration</label>
                             <div id="registration"></div>
-                            <input type="button" class="add btn btn-success" value="+" id="add" style="margin-top:3px" />
+                            <input type="button" class="add btn btn-success" value="+ Add Registration" id="add" style="margin-top:3px" />
                         </div>
                         <div class="form-group">
                             <label>Shareholders</label>
                             <div id="affiliate"></div>
-                            <input type="button" class="a_add btn btn-success" value="+" id="a_add" style="margin-top:3px" />
+                            <input type="button" class="a_add btn btn-success" value="+ Add shareholder" id="a_add" style="margin-top:3px" />
                         </div>
                         <!-- <div class="form-group">
                             <label for="stocks_owned">Stocks Owned</label>
@@ -361,6 +380,11 @@ include('server.php');
                     $stmt1 = sqlsrv_query($db, $sql1);
                     while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
                         echo "<option>" . $row['first_name'] . ' ' . $row['last_name'] . "</option>";
+                    }
+                    $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0'";
+                    $stmt2 = sqlsrv_query($db, $sql2);
+                    while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                        echo "<option>" . $row['company_name'] . "</option>";
                     }
                     echo "'";
                     ?> +

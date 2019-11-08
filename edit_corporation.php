@@ -78,33 +78,32 @@ include('server.php');
                             <!-- Start of for loop -->
                             <?php
                                 for ($i = 0; $i < count($company_affiliation); $i++) {
-                                    if(empty($director_officer[$i])){
+                                    if (empty($director_officer[$i])) {
                                         ?>
-                                        <div class="row">
-                                    <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
-                                        <label for="f_name">Directors/Officers</label>
-                                        <input type="text" name="dir_off[]" class="form-control" required value="">
+                                    <div class="row">
+                                        <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
+                                            <label for="f_name">Directors/Officers</label>
+                                            <input type="text" name="dir_off[]" class="form-control" required value="">
+                                        </div>
+                                        <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
+                                            <label for='f_name'>Position</label>
+                                            <input type="text" name="do_position[]" class="form-control" required value="">
+                                        </div>
                                     </div>
-                                    <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
-                                        <label for='f_name'>Position</label>
-                                        <input type="text" name="do_position[]" class="form-control" required value="">
+                                <?php
+                                        } else {
+                                            ?>
+                                    <div class="row">
+                                        <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
+                                            <label for="f_name">Directors/Officers</label>
+                                            <input type="text" name="dir_off[]" class="form-control" required value="<?= $director_officer[$i] ?>">
+                                        </div>
+                                        <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
+                                            <label for='f_name'>Position</label>
+                                            <input type="text" name="do_position[]" class="form-control" required value="<?= $do_position[$i] ?>">
+                                        </div>
                                     </div>
-                                </div>
-                                        <?php
-                                    }
-                                        else{
-                                    ?>
-                                <div class="row">
-                                    <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
-                                        <label for="f_name">Directors/Officers</label>
-                                        <input type="text" name="dir_off[]" class="form-control" required value="<?= $director_officer[$i] ?>">
-                                    </div>
-                                    <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
-                                        <label for='f_name'>Position</label>
-                                        <input type="text" name="do_position[]" class="form-control" required value="<?= $do_position[$i] ?>">
-                                    </div>
-                                </div>
-                                        <?php } ?>
+                                <?php } ?>
                                 <div class="row">
                                     <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
                                         <label for='f_name'>Company Affiliation</label>
@@ -136,7 +135,20 @@ include('server.php');
                                 <div class="row">
                                     <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                         <label for='f_name'>Type of Shares</label>
-                                        <input type="text" name="type_of_shares[]" class="form-control" required value="<?= $type_of_share[$i] ?>">
+                                        <!-- <input type="text" name="type_of_shares[]" class="form-control" required value="<?= $type_of_share[$i] ?>"> -->
+                                        <select name="type_of_shares[]" class="form-control" required>
+                                            <?php
+                                                    if ($type_of_share[$i] == "Common") { ?>
+                                                <option selected>Common</option>
+                                                <option>Preferred</option>
+                                            <?php
+                                                    } else { ?>
+                                                <option>Common</option>
+                                                <option selected>Preferred</option>
+                                            <?php
+                                                    }
+                                                    ?>
+                                        </select>
                                     </div>
                                     <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                         <label for="f_name">Shares owned</label>
@@ -153,7 +165,7 @@ include('server.php');
                             <?php } ?>
                             <div class="form-group">
                                 <div id="add_user"></div>
-                                <input type="button" class="a_add btn btn-success" value="+" id="edit_corp_add" style="margin-top:3px" />
+                                <input type="button" class="a_add btn btn-success" value="+ Add Company Affiliation" id="edit_corp_add" style="margin-top:3px" />
                             </div>
                             <button class="btn btn-primary" name="edit_corporation_submit">Submit</button>
                         <?php } ?>
@@ -174,7 +186,18 @@ include('server.php');
                 // Directors and Officers = dir_off
                 var dir_off = $("<div class='col-md-5 col-xs-5 col-xl-5 col-sm-5'><label for='f_name'>Directors/Officers</label><input class='form-control' type='text' name='dir_off[]' class='form-control' /></div>");
                 var do_position = $("<div class='col-md-5 col-xs-5 col-xl-5 col-sm-5'><label for='f_name'>Position</label><input class='form-control' type='text' name='do_position[]' class='form-control'/></div>");
-                var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><label for='f_name'>Company Affiliation</label><input class='form-control' type='text' name='aff_comp[]' class='form-control'/></div>");
+                // var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><label for='f_name'>Company Affiliation</label><input class='form-control' type='text' name='aff_comp[]' class='form-control'/></div>");
+                var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><label for='f_name'>Company Affiliation</label><input placeholder='Company Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
+                    <?php
+                    echo "'";
+                    $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
+                    $stmt2 = sqlsrv_query($db, $sql2);
+                    while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                        echo "<option>" . $row['company_name'] . "</option>";
+                    }
+                    echo "'";
+                    ?> +
+                    "</datalist></div><div class='col-md-1 col-xs-1 col-xl-1 col-sm-1'><a id='add_sh_show' style='display:none' class='btn btn-success'>+</a></div>'");
                 var type_of_shares = $("<div class='col-md-5 col-xs-5 col-xl-5 col-sm-5'><label for='f_name'>Type of Shares</label><input class='form-control' type='text' name='type_of_shares[]' class='form-control'/></div>");
                 var shares_owned = $("<div class='col-md-5 col-xs-5 col-xl-5 col-sm-5'><label for='f_name'>Shares owned</label><input class='form-control' type='text' name='shares_owned[]' class='form-control'/></div>");
                 var remarks = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><label for='f_name'>Remarks</label><textarea name='remarks[]' class='form-control' cols='5' rows='5'></textarea></div>");

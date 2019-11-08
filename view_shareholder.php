@@ -51,7 +51,19 @@ if (empty($_SESSION['mpic_mpic_name'])) {
             <div class="row">
                 <div class="col-md-12 col-xl-12 col-sm-12 col-xs-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Company Affiliation</div>
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-6 col-xl-6 col-sm-6 col-xs-6">
+                                    <h5>Company Affiliation</h5>
+                                </div>
+                                <div class="col-md-6 col-xl-6 col-sm-6 col-xs-6">
+                                    <form action="pdf" method="POST" target="_blank">
+                                        <input type="hidden" name="ind_id" value="<?= $_GET['sh_id'] ?>">
+                                        <button class="btn" name="ind_pdf" style="float:right">Generate PDF</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <div class="panel-body">
                             <table class="table table-hover" id="tbl_ind">
                                 <thead>
@@ -78,16 +90,16 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                                     $position = $key;
                                                 }
                                                 ?>
-                                                <tr>
-                                                    <td><?= $row['company_name'] ?></td>
-                                                    <td>Company</td>
-                                                    <td><?= $arr1[$position] ?></td>
-                                                    <td><?= $arr2[$position] ?></td>
-                                                    <td><a href='view_company.php?comp_name=<?= $row['company_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
-                                                </tr>
-                                    <?php
-                                            }
+                                            <tr>
+                                                <td><?= $row['company_name'] ?></td>
+                                                <td>Company</td>
+                                                <td><?= $arr1[$position] ?></td>
+                                                <td><?= $arr2[$position] ?></td>
+                                                <td><a href='view_company.php?comp_name=<?= $row['company_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
+                                            </tr>
+                                <?php
                                         }
+                                    }
                                 }
                                 // End of company
                                 ?>

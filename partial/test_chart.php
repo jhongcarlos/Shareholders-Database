@@ -3,12 +3,7 @@ include('../server.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<!-- <style>
- [node-id='1'] rect {
-        fill: #456;
-    }
 
-</style> -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +12,9 @@ include('../server.php');
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://balkangraph.com/js/latest/OrgChart.js"></script>
 
-    <title>Document</title>
+    <title><?php if (!empty($_GET['cat'])) {
+                echo $_GET['cat'];
+            } ?> - Graphical Report</title>
 </head>
 
 <body>
@@ -25,7 +22,8 @@ include('../server.php');
     <div id="people" style="height:100%;width:100%"></div>
     <script>
         $(document).ready(function(e) {
-
+            OrgChart.slinkTemplates.affiliations = Object.assign({}, OrgChart.slinkTemplates.orange);
+            OrgChart.slinkTemplates.affiliations.link = '<path  marker-start="url(#arrowSlinkOrange)" marker-end="url(#dotSlinkOrange)" stroke-linejoin="round" stroke="#000" stroke-width="2" fill="none" d="{d}" />';
             setInterval(function() {
                 $('a[title="GetOrgChart jquery plugin"]').hide();
                 // $('.get-btn').hide();
@@ -34,6 +32,46 @@ include('../server.php');
         });
         var chart = new OrgChart(document.getElementById("people"), {
             // mouseScrool: OrgChart.action.none,
+            // template: "ula",
+            slinks: [
+                <?php
+                $sql = "";
+                $stmt = "";
+                if (empty($_GET)) {
+                    $sql = "SELECT * FROM dbo.tbl_company";
+                    $stmt = sqlsrv_query($db, $sql);
+                } else {
+                    $cat = $_GET['cat'];
+                    $sql = "SELECT * FROM dbo.tbl_company 
+                    WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' OR 
+                    CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
+                    $stmt = sqlsrv_query($db, $sql);
+                }
+                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                    $arr = explode(",", $row['company_affiliation']);
+                    // echo "<script>console.log('s')</script>";
+                    foreach ($arr as $k => $v) {
+                        if ($v == "") {
+                            $v = 0;
+                        } else {
+                            // Loop starts here
+                            $sql2 = "SELECT * FROM dbo.tbl_company 
+                            WHERE CONVERT(NVARCHAR(MAX), company_name) = N'$v'";
+                            $stmt2 = sqlsrv_query($db, $sql2);
+                            if ($r = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) { ?> {
+                                    from: <?= $row['ID'] ?>,
+                                    to: <?= $r['ID'] ?>,
+                                    template: 'affiliations',
+                                    label: '<?= "from:" . $row['ID'] . "to:" . $r['ID'] ?>',
+                                },
+                <?php
+
+                            }
+                        }
+                    }
+                }
+                ?>
+            ],
             menu: {
                 pdf: {
                     text: "Export PDF"
@@ -64,8 +102,6 @@ include('../server.php');
                     $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
                     $stmt = sqlsrv_query($db, $sql);
                 }
-
-
                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                     $par_id = "";
                     if ($row['parent_id'] == 0) {
@@ -82,8 +118,8 @@ include('../server.php');
                     },
                 <?php
                 }
-                ?>
-
+                ?> 
+                
             ]
         });
     </script>

@@ -107,7 +107,7 @@ include('server.php');
                                 <div class="form-group">
                                     <label>Company Affiliation</label>
                                     <div id="affiliates"></div>
-                                    <input type="button" class="add btn btn-success" value="+" id="shareholder_add" style="margin-top:3px" />
+                                    <input type="button" class="add btn btn-success" value="+ Add Company Affiliation" id="shareholder_add" style="margin-top:3px" />
                                 </div>
                                 <button class="btn btn-primary" style="float:right" name="sh_submit">Submit</button>
                             </form>

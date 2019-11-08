@@ -48,6 +48,7 @@ if (isset($_POST['btn_login'])) {
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
             $_SESSION['mpic_mpic_name'] = $row['first_name'] . ' ' . $row['last_name'];
             $_SESSION['mpic_mpic_role'] = $row['role'];
+            $_SESSION['mpic_mpic_id'] = $row['ID'];
         }
         header("Location: index");
     } else {
@@ -78,6 +79,8 @@ if (isset($_POST['sh_submit'])) {
             '0')";
         $stmt = sqlsrv_query($db, $sql);
         echo "<script>alert('Success!')</script>";
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Individual - $first_name $last_name','$datetime')");
     } else {
         $aff_comp = $_POST['aff_comp'];
         $held_position = $_POST['held_position'];
@@ -158,6 +161,8 @@ if (isset($_POST['sh_submit'])) {
             '0')";
         $stmt = sqlsrv_query($db, $sql);
         echo "<script>alert('Success!')</script>";
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Individual - $first_name $last_name','$datetime')");
     }
 }
 if (isset($_POST['corp_submit'])) {
@@ -181,6 +186,8 @@ if (isset($_POST['corp_submit'])) {
         $stmt = sqlsrv_query($db, $sql);
         if ($stmt) {
             echo "<script>alert('Sucess')</script>";
+            $user_name = $_SESSION['mpic_mpic_name'];
+            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Coporation - $c_name','$datetime')");
         }
     } else {
 
@@ -275,6 +282,8 @@ if (isset($_POST['corp_submit'])) {
         $stmt = sqlsrv_query($db, $sql);
         if ($stmt) {
             echo "<script>alert('Sucess')</script>";
+            $user_name = $_SESSION['mpic_mpic_name'];
+            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Corporation - $c_name','$datetime')");
         }
     }
 }
@@ -284,6 +293,8 @@ if (isset($_POST['c_delete'])) {
     $stmt = sqlsrv_query($db, $query);
     if ($stmt) {
         echo "<script>alert('Deleted')</script>";
+        $user_name = $_SESSION['mpic_mpic_name'];
+            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Deleted Corporation - $id','$datetime')");
     }
 }
 if (isset($_POST['sh_delete'])) {
@@ -292,6 +303,8 @@ if (isset($_POST['sh_delete'])) {
     $stmt = sqlsrv_query($db, $query);
     if ($stmt) {
         echo "<script>alert('Deleted')</script>";
+        $user_name = $_SESSION['mpic_mpic_name'];
+            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Deleted Individual - $id','$datetime')");
     }
 }
 if (isset($_POST['c_view'])) {
@@ -388,6 +401,8 @@ if (isset($_POST['edit_individual_submit'])) {
          Data has been updated
         </div>
         ";
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Edited Individual - $first_name $last_name','$datetime')");
     }
 }
 if (isset($_POST['c_edit'])) {
@@ -464,6 +479,8 @@ if (isset($_POST['edit_corporation_submit'])) {
          Data has been updated
         </div>
         ";
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Edited Corporation - $corp_name','$datetime')");
     }
 }
 if (isset($_POST['btn_register'])) {
@@ -541,26 +558,30 @@ if (isset($_POST['comp_submit'])) {
     $sec_num = $_POST['sec_num'];
     $tin_num = $_POST['tin_num'];
     $category = $_POST['category'];
+    $int_ext = $_POST['int_ext'];
+    $parent_id = $_POST['parent_id'];
     $address = $_POST['address'];
     $total_num_shares = $_POST['total_num_shares'];
 
     if (empty($_POST['aff_comp'])) {
         // Query here
         $sql = "INSERT INTO dbo.tbl_company(company_name,
-        sec_num,tin_num,total_shares,category,[address],last_update,parent_id,is_deleted)
+        sec_num,tin_num,total_shares,category,internal_external,[address],last_update,parent_id,is_deleted)
                 VALUES('$c_name',
                 '$sec_num',
                 '$tin_num',
                 '$total_num_shares',
                 '$category',
+                '$int_ext',
                 '$address',
                 '$datetime',
-                '19',
+                '$parent_id',
                 '0')";
         $stmt = sqlsrv_query($db, $sql);
         if ($stmt) {
             echo "<script>alert('Company Added')</script>";
-            // header("Location: add_individual_or_corp");
+            $user_name = $_SESSION['mpic_mpic_name'];
+            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Company - $c_name','$datetime')");
         }
     } else {
 
@@ -637,6 +658,7 @@ if (isset($_POST['comp_submit'])) {
                 '$tin_num',
                 '$total_num_shares',
                 '$category',
+                '$int_ext',
                 '$address',
                 '$aff_com_h',
                 '$dir_off_h',
@@ -646,11 +668,13 @@ if (isset($_POST['comp_submit'])) {
                 '$stocks_cert_h',
                 '$remarks_h',
                 '$datetime',
-                '1',
+                '$parent_id',
                 '0')";
         $stmt = sqlsrv_query($db, $sql);
         if ($stmt) {
             echo "<script>alert('Company Added')</script>";
+            $user_name = $_SESSION['mpic_mpic_name'];
+            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Company - $c_name','$datetime')");
         }
     }
 }
@@ -661,6 +685,8 @@ if (isset($_POST['comp_delete'])) {
     $stmt = sqlsrv_query($db, $query);
     if ($stmt) {
         echo "<script>alert('Deleted')</script>";
+        $user_name = $_SESSION['mpic_mpic_name'];
+            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Deleted Company - $id','$datetime')");
     }
 }
 if (isset($_POST['comp_edit'])) {
@@ -672,7 +698,7 @@ if (isset($_POST['comp_view'])) {
     $_SESSION['comp_name'] = $_POST['comp_name'];
     header('Location:view_company?comp_name=' . $_POST['comp_name']);
 }
-if(isset($_POST['edit_company_submit'])){
+if (isset($_POST['edit_company_submit'])) {
     // constants
     $id = $_POST['id'];
     $comp_name = $_POST['comp_name'];
@@ -743,5 +769,7 @@ if(isset($_POST['edit_company_submit'])){
          Data has been updated
         </div>
         ";
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Edited Company - $c_name','$datetime')");
     }
 }

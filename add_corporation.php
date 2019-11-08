@@ -59,12 +59,12 @@ include('server.php');
                         <div class="form-group">
                             <label>Registration</label>
                             <div id="registration"></div>
-                            <input type="button" class="add btn btn-success" value="+" id="add" style="margin-top:3px" />
+                            <input type="button" class="add btn btn-success" value="+ Add Registration" id="add" style="margin-top:3px" />
                         </div>
                         <div class="form-group">
                             <label>Company Affiliation</label>
                             <div id="affiliate"></div>
-                            <input type="button" class="a_add btn btn-success" value="+" id="a_add" style="margin-top:3px" />
+                            <input type="button" class="a_add btn btn-success" value="+ Add Company Affiliation" id="a_add" style="margin-top:3px" />
                         </div>
                         <!-- <div class="form-group">
                             <label for="stocks_owned">Stocks Owned</label>
