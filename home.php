@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/home.css">
+
     <style>
         img {
             margin: 10px;
@@ -31,6 +33,27 @@
 </head>
 
 <body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+           
+          
+         <div class="navbar-left logo"> 
+          </div>
+		<h1 class="brand brand-name navbar-left"><div class="navbar-left">
+            <img src="images/MPIC_logo.png" alt="">
+        </h1>
+        </div>
+        <!-- <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="#intro">Home</a></li>
+   				<li><a href="#about">About</a></li>
+   				<li><a href="#portfolio">Menu</a></li>
+    			<li><a href="#contact">Reserve</a></li>
+            </ul>
+        </div> -->
+    </div>
+</nav>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <h2 class="display-4 text-center text-white">OUR COMPANY</h2>
@@ -156,6 +179,7 @@
             Cras accumsan fringilla hendrerit. Praesent facilisis turpis id aliquet porta. Proin sed tempus quam. Quisque commodo egestas feugiat. Vivamus vulputate felis vel nisi faucibus tempus. Aliquam at massa elementum, tristique lectus vitae, laoreet enim. Fusce ut nibh eros. Aliquam erat volutpat.
     </div>
     <?php include('partial/index_footer.php'); ?>
+    <script src="js/home.js"></script>
 </body>
 
 </html>

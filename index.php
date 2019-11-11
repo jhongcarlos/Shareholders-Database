@@ -17,7 +17,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Home - Metro Pacific Investment Corporation</title>
     <?php include('partial/header.php'); ?>
     <link rel="stylesheet" href="css/sidebar.css">
     <style>
@@ -25,7 +25,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
             display: block;
             margin-left: auto;
             margin-right: auto;
-            height: 80px;
+            height: 70px;
             width: 180px;
             /* margin-top: px; */
         }
@@ -68,8 +68,8 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                         <li><a href="#"><i class="fa fa-bolt"></i> Power</a></li>
                         <li><a href="#"><i class="fa fa-tint"></i> Water</a></li>
                         <li><a href="#"><i class="fa fa-train"></i> Rail</a></li>
-                        <li><a target="blank" href="http://localhost:8080/mssql_test/partial/test_chart?cat=Tollways"><i class="fa fa-road"></i> Tollways</a></li>
-                        <li><a target="blank" href="http://localhost:8080/mssql_test/partial/test_chart?cat=Logistics"><i class="fa fa-truck"></i> Logistics</a></li>
+                        <li><a target="blank" href="partial/test_chart?cat=Tollways"><i class="fa fa-road"></i> Tollways</a></li>
+                        <li><a target="blank" href="partial/test_chart?cat=Logistics"><i class="fa fa-truck"></i> Logistics</a></li>
                         <li><a href="#"><i class="fa fa-hospital-o"></i> Hospital</a></li>
                         <li><a href="#">Others</a></li>
                     </ul>
@@ -83,197 +83,198 @@ if (empty($_SESSION['mpic_mpic_name'])) {
 
         <!-- Page Content Holder -->
         <div id="content">
-            
+
             <button type="button" id="sidebarCollapse" class="btn btn-primary navbar-btn">
                 <i class="glyphicon glyphicon-align-left"></i>
                 <span>Toggle Sidebar</span>
             </button>
 
-            <div class="container-fluid"><br>
-                <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#company">Company</a></li>
-                    <li><a data-toggle="tab" href="#corporation">Corporation</a></li>
-                    <li><a data-toggle="tab" href="#shareholder">Individual</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div id="company" class="tab-pane fade in active">
-                        <!-- Content -->
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3>Company Information</h3>
-                            </div>
-                            <div class="col-md-6">
-                                <h3 style="float:right"><a href="add_company" class="btn btn-success"><i class="fa fa-plus"> Add Company</i></a></h3>
+            <!-- <div class="container-fluid"><br> -->
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#company">Company</a></li>
+                <li><a data-toggle="tab" href="#corporation">Corporation</a></li>
+                <li><a data-toggle="tab" href="#shareholder">Individual</a></li>
+            </ul>
+            <div class="tab-content">
+
+                <div id="company" class="tab-pane fade in active">
+                    <!-- Content -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3>Company Information</h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 style="float:right"><a href="add_company" class="btn btn-success"><i class="fa fa-plus"> Add Company</i></a></h5>
+                                </div>
                             </div>
                         </div>
-                        <table id="tbl_company" class="table table-responsive table-hover" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Company Name</th>
-                                    <th>Registration</th>
-                                    <th>Total Shares</th>
-                                    <th>Remarks</th>
-                                    <th>Last Update</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0'";
-                                $stmt = sqlsrv_query($db, $sql);
-
-                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                    ?>
+                        <div class="panel-body">
+                            <table id="tbl_company" class="table table-responsive table-hover" style="width:100%">
+                                <thead>
                                     <tr>
-                                        <td><?= $row['ID'] ?></td>
-                                        <td><?= $row['company_name'] ?></td>
-                                        <td><span><b>SEC Number: </b></span><?= $row['sec_num'] ?><br><span><b>TIN Number: </b></span><?= $row['tin_num'] ?></td>
-                                        <td><?= str_replace('|', '<br />', $row['total_shares']) ?></td>
-                                        <td><?= str_replace(',', '<br />', $row['remarks']) ?></td>
-                                        <td><?= $row['last_update'] ?></td>
-                                        <td>
-                                            <form method="POST">
-                                                <input type="hidden" name="id" value="<?= $row['ID']; ?>">
-                                                <input type="hidden" name="comp_name" value="<?= $row['company_name']; ?>">
-                                                <button class="btn btn-primary" name="comp_view" title="View"><i class="fa fa-eye"></i></button>
-                                                <button class="btn btn-warning" name="comp_edit" title="Edit"><i class="fa fa-edit"></i></button>
-                                                <button class="btn btn-danger" name="comp_delete" title="Delete"><i class="fa fa-trash"></i></button>
-                                            </form>
-                                        </td>
+                                        <th>ID</th>
+                                        <th>Company Name</th>
+                                        <th>Registration</th>
+                                        <th>Total Shares</th>
+                                        <th>Remarks</th>
+                                        <th>Last Update</th>
+                                        <th width="15%">Action</th>
                                     </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="corporation" class="tab-pane fade">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3>Corporation Information</h3>
-                            </div>
-                            <div class="col-md-6">
-                                <h3 style="float:right"><a href="add_corporation" class="btn btn-success"><i class="fa fa-plus"> Add Corporation</i></a></h3>
-                            </div>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0'";
+                                    $stmt = sqlsrv_query($db, $sql);
+
+                                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $row['ID'] ?></td>
+                                            <td><?= $row['company_name'] ?></td>
+                                            <td><span><b>SEC Number: </b></span><?= $row['sec_num'] ?><br><span><b>TIN Number: </b></span><?= $row['tin_num'] ?></td>
+                                            <td><?= str_replace('|', '<br />', $row['total_shares']) ?></td>
+                                            <td><?= str_replace(',', '<br />', $row['remarks']) ?></td>
+                                            <td><?= $row['last_update'] ?></td>
+                                            <td>
+                                                <form method="POST">
+                                                    <input type="hidden" name="id" value="<?= $row['ID']; ?>">
+                                                    <input type="hidden" name="comp_name" value="<?= $row['company_name']; ?>">
+                                                    <button class="btn btn-primary" name="comp_view" title="View"><i class="fa fa-eye"></i></button>
+                                                    <button class="btn btn-warning" name="comp_edit" title="Edit"><i class="fa fa-edit"></i></button>
+                                                    <button class="btn btn-danger" name="comp_delete" title="Delete"><i class="fa fa-trash"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
                         </div>
-                        <table id="tbl_corp" class="table table-responsive table-hover" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Corporation Name</th>
-                                    <th>Registration</th>
-                                    <th>Type of Shares</th>
-                                    <th>Shares Owned</th>
-                                    <th>Remarks</th>
-                                    <th>Last Update</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $sql = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0'";
-                                $stmt = sqlsrv_query($db, $sql);
-
-                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                    ?>
-                                    <tr>
-                                        <td><?= $row['ID'] ?></td>
-                                        <td><?= $row['corporation_name'] ?></td>
-                                        <td><span><b>SEC Number: </b></span><?= $row['sec_num'] ?><br><span><b>TIN Number: </b></span><?= $row['tin_num'] ?></td>
-                                        <td><?= str_replace(',', '<br />', $row['type_of_share']) ?></td>
-                                        <td class='sss'><?= str_replace('|', '<br>', $row['shares_owned']) ?></td>
-                                        <td><?= str_replace(',', '<br />', $row['remarks']) ?></td>
-                                        <td><?= $row['last_update'] ?></td>
-                                        <td>
-                                            <form method="POST">
-                                                <input type="hidden" name="id" value="<?= $row['ID']; ?>">
-                                                <input type="hidden" name="corp_name" value="<?= $row['corporation_name']; ?>">
-                                                <button class="btn btn-primary" name="c_view" title="View"><i class="fa fa-eye"></i></button>
-                                                <button class="btn btn-warning" name="c_edit" title="Edit"><i class="fa fa-edit"></i></button>
-                                                <button class="btn btn-danger" name="c_delete" title="Delete"><i class="fa fa-trash"></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="shareholder" class="tab-pane fade">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3>Individual Information</h3>
-                            </div>
-                            <div class="col-md-6">
-                                <h3 style="float:right"><a href="add_individual" class="btn btn-success"><i class="fa fa-plus"> Add Individual</i></a></h3>
-                            </div>
-                        </div>
-                        <table id="tbl_shareholder" style="width:100%" class="table table-responsive table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Internal / External</th>
-                                    <th>Held Position</th>
-                                    <th>Shares Owned</th>
-                                    <th>Type of Shares</th>
-                                    <th>Remarks</th>
-                                    <th>Last update</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $sql = "SELECT * FROM dbo.tbl_shareholder WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0'";
-                                $stmt = sqlsrv_query($db, $sql);
-
-                                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                                    ?>
-                                    <tr>
-                                        <td><?= $row['ID'] ?></td>
-                                        <td><?= $row['first_name'] . ' ' . $row['last_name'] ?></td>
-                                        <td><?= str_replace(',', '<br />', $row['internal_external']) ?></td>
-                                        <td><?= str_replace(',', '<br />', $row['held_position']) ?></td>
-                                        <td><?= str_replace('|', '<br />', $row['shares_owned']) ?></td>
-                                        <td><?= str_replace(',', '<br />', $row['type_of_shares']) ?></td>
-                                        <td><?= str_replace(',', '<br />', $row['remarks']) ?></td>
-                                        <td><?= $row['last_update'] ?></td>
-                                        <td>
-                                            <form method="POST">
-                                                <input type="hidden" name="id" value="<?= $row['ID'] ?>">
-                                                <button class="btn btn-primary" name="sh_view" title="View"><i class="fa fa-eye"></i></button>
-                                                <button class="btn btn-warning" name="sh_edit" title="Edit"><i class="fa fa-edit"></i></button>
-                                                <button class="btn btn-danger" name="sh_delete" title="Delete"><i class="fa fa-trash"></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                            <!-- <tfoot>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Company Affiliation</th>
-                            <th>Position</th>
-                            <th>Stocks owned</th>
-                            <th>Last update</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot> -->
-                        </table>
                     </div>
                 </div>
-                <!-- Adding of field -->
-                <!-- <form method="post">
-            <div id="buildyourform"></div>
-            <button name="test_submit">submit</button>
-        </form>
-        <input type="button" value="Add a field" class="add" id="add" /> -->
+                <div id="corporation" class="tab-pane fade">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3>Corporation Information</h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 style="float:right"><a href="add_corporation" class="btn btn-success"><i class="fa fa-plus"> Add Corporation</i></a></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table id="tbl_corp" style="width:100%" class="table table-responsive table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Corporation Name</th>
+                                        <th>Registration</th>
+                                        <th>Type of Shares</th>
+                                        <th>Shares Owned</th>
+                                        <th>Remarks</th>
+                                        <th>Last Update</th>
+                                        <th width="15%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0'";
+                                    $stmt = sqlsrv_query($db, $sql);
 
+                                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $row['ID'] ?></td>
+                                            <td><?= $row['corporation_name'] ?></td>
+                                            <td><span><b>SEC Number: </b></span><?= $row['sec_num'] ?><br><span><b>TIN Number: </b></span><?= $row['tin_num'] ?></td>
+                                            <td><?= str_replace(',', '<br />', $row['type_of_share']) ?></td>
+                                            <td class='sss'><?= str_replace('|', '<br>', $row['shares_owned']) ?></td>
+                                            <td><?= str_replace(',', '<br />', $row['remarks']) ?></td>
+                                            <td><?= $row['last_update'] ?></td>
+                                            <td>
+                                                <form method="POST">
+                                                    <input type="hidden" name="id" value="<?= $row['ID']; ?>">
+                                                    <input type="hidden" name="corp_name" value="<?= $row['corporation_name']; ?>">
+                                                    <button class="btn btn-primary" name="c_view" title="View"><i class="fa fa-eye"></i></button>
+                                                    <button class="btn btn-warning" name="c_edit" title="Edit"><i class="fa fa-edit"></i></button>
+                                                    <button class="btn btn-danger" name="c_delete" title="Delete"><i class="fa fa-trash"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="shareholder" class="tab-pane fade">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3>Individual Information</h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 style="float:right"><a href="add_individual" class="btn btn-success"><i class="fa fa-plus"> Add Individual</i></a></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table id="tbl_shareholder" style="width:100%" class="table table-responsive table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Internal / External</th>
+                                        <th>Held Position</th>
+                                        <th>Shares Owned</th>
+                                        <th>Type of Shares</th>
+                                        <th>Remarks</th>
+                                        <th>Last update</th>
+                                        <th width="15%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT * FROM dbo.tbl_shareholder WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0'";
+                                    $stmt = sqlsrv_query($db, $sql);
+
+                                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $row['ID'] ?></td>
+                                            <td><?= $row['first_name'] . ' ' . $row['last_name'] ?></td>
+                                            <td><?= str_replace(',', '<br />', $row['internal_external']) ?></td>
+                                            <td><?= str_replace(',', '<br />', $row['held_position']) ?></td>
+                                            <td><?= str_replace('|', '<br />', $row['shares_owned']) ?></td>
+                                            <td><?= str_replace(',', '<br />', $row['type_of_shares']) ?></td>
+                                            <td><?= str_replace(',', '<br />', $row['remarks']) ?></td>
+                                            <td><?= $row['last_update'] ?></td>
+                                            <td>
+                                                <form method="POST">
+                                                    <input type="hidden" name="id" value="<?= $row['ID'] ?>">
+                                                    <button class="btn btn-primary" name="sh_view" title="View"><i class="fa fa-eye"></i></button>
+                                                    <button class="btn btn-warning" name="sh_edit" title="Edit"><i class="fa fa-edit"></i></button>
+                                                    <button class="btn btn-danger" name="sh_delete" title="Delete"><i class="fa fa-trash"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <?php include('partial/index_footer.php'); ?>
     <script>
         $(document).ready(function() {
+            $(".sorting").removeAttr("style");
             $("#sidebarCollapse").on("click", function() {
                 $("#sidebar").toggleClass("active");
                 $(this).toggleClass("active");

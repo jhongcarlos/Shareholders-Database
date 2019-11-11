@@ -28,11 +28,11 @@ $db = sqlsrv_connect('MPIC-BACKUP-02', $conn_info);
 //     echo $row['column1'].", ".$row['column2']."<br />";
 // }
 
-// Delete Data
+// Delete Data  ======
 // $query = "DELETE FROM dbo.users_login WHERE id='0'";
 // $stmt = sqlsrv_query($db, $query);
 
-// Update Data
+// Update Data ======
 // $query = "UPDATE dbo.test_tbl SET column1 = 'Value' WHERE id = 'some id'";
 // $stmt = sqlsrv_query($db, $query);
 
@@ -49,6 +49,7 @@ if (isset($_POST['btn_login'])) {
             $_SESSION['mpic_mpic_name'] = $row['first_name'] . ' ' . $row['last_name'];
             $_SESSION['mpic_mpic_role'] = $row['role'];
             $_SESSION['mpic_mpic_id'] = $row['ID'];
+            $_SESSION['mpic_mpic_company'] = $row['will_handle'];
         }
         header("Location: index");
     } else {
