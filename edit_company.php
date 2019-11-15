@@ -1,5 +1,17 @@
 <?php
 include('server.php');
+
+$edit_comp = $_SESSION['mpic_mpic_company'];
+$edit_sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), company_name) = N'$edit_comp'";
+$edit_stmt = sqlsrv_query($db, $edit_sql);
+$comp_id = "";
+if ($row = sqlsrv_fetch_array($edit_stmt, SQLSRV_FETCH_ASSOC)) {
+    $comp_id = $row['ID'];
+}
+if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] == "Administrator") { } 
+elseif ($_SESSION['mpic_mpic_role'] == "Site Admin" and $comp_id == $_SESSION['edit_id_comp']) { } else {
+    header('Location:index');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

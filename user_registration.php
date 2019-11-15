@@ -1,5 +1,8 @@
 <?php
 include('server.php');
+if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] == "Administrator") { } else {
+    header('Location:index');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +23,7 @@ include('server.php');
             <?php if (empty($error_message)) {
                 $error_message = "";
             } ?>
+            <a href="index">← Home</a>
             <h2 style="color:#456;text-align:left">Register</h2>
             <p style="color: red;text-align:center;padding:5px"><?= $error_message ?></p>
             <form method="post">
@@ -85,7 +89,7 @@ include('server.php');
         </div>
     </div>
     <?php
-        include('partial/index_footer.php');
+        // include('partial/index_footer.php');
     ?>
 </body>
 

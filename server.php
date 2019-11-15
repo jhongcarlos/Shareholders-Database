@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 date_default_timezone_set('Asia/Manila');
 $datetime = date('m/d/Y h:i a', time());
 // Connect to MSSQL DB
@@ -41,7 +42,7 @@ if (isset($_POST['btn_login'])) {
     $email = $_POST['email'];
     $password = md5($_POST['password']);
 
-    $sql = "SELECT * FROM dbo.users_login WHERE email LIKE '$email' AND password LIKE '$password'";
+    $sql = "SELECT * FROM dbo.users_login WHERE email LIKE '$email' AND password LIKE '$password' AND is_deleted LIKE '0'";
     $stmt = sqlsrv_query($db, $sql, array(), array("Scrollable" => "static"));
 
     if (sqlsrv_num_rows($stmt) == 1) {
@@ -51,6 +52,8 @@ if (isset($_POST['btn_login'])) {
             $_SESSION['mpic_mpic_id'] = $row['ID'];
             $_SESSION['mpic_mpic_company'] = $row['will_handle'];
         }
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Logged in','$datetime')");
         header("Location: index");
     } else {
         $error_message = "Invalid email or password";
@@ -288,24 +291,35 @@ if (isset($_POST['corp_submit'])) {
         }
     }
 }
+$corp_del_res = "";
 if (isset($_POST['c_delete'])) {
     $id = $_POST['id'];
+    $corp_name = $_POST['corp_name'];
     $query = "UPDATE dbo.tbl_corporation SET is_deleted = '1' WHERE ID = '$id'";
     $stmt = sqlsrv_query($db, $query);
     if ($stmt) {
-        echo "<script>alert('Deleted')</script>";
+        $corp_del_res = "
+        <div class='alert alert-success'>
+        " . $corp_name . " has been deleted
+        </div>
+        ";
         $user_name = $_SESSION['mpic_mpic_name'];
-            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Deleted Corporation - $id','$datetime')");
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Deleted $corp_name - $id','$datetime')");
     }
 }
+$ind_del_res = "";
 if (isset($_POST['sh_delete'])) {
     $id = $_POST['id'];
+    $ind_name = $_POST['ind_name'];
     $query = "UPDATE dbo.tbl_shareholder SET is_deleted = '1' WHERE ID = '$id'";
     $stmt = sqlsrv_query($db, $query);
     if ($stmt) {
-        echo "<script>alert('Deleted')</script>";
+        $ind_del_res = "<div class='alert alert-success'>
+        " . $ind_name . " has been deleted
+        </div>
+        ";
         $user_name = $_SESSION['mpic_mpic_name'];
-            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Deleted Individual - $id','$datetime')");
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Deleted $ind_name - $id','$datetime')");
     }
 }
 if (isset($_POST['c_view'])) {
@@ -680,14 +694,19 @@ if (isset($_POST['comp_submit'])) {
     }
 }
 // Company Buttons on index
+$comp_del_res = "";
 if (isset($_POST['comp_delete'])) {
     $id = $_POST['id'];
+    $comp_name = $_POST['comp_name'];
     $query = "UPDATE dbo.tbl_company SET is_deleted = '1' WHERE ID = '$id'";
     $stmt = sqlsrv_query($db, $query);
     if ($stmt) {
-        echo "<script>alert('Deleted')</script>";
+        $comp_del_res = "<div class='alert alert-success'>
+        " . $comp_name . " has been deleted
+        </div>
+        ";
         $user_name = $_SESSION['mpic_mpic_name'];
-            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Deleted Company - $id','$datetime')");
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Deleted $comp_name - $id','$datetime')");
     }
 }
 if (isset($_POST['comp_edit'])) {
@@ -772,5 +791,85 @@ if (isset($_POST['edit_company_submit'])) {
         ";
         $user_name = $_SESSION['mpic_mpic_name'];
         $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Edited Company - $c_name','$datetime')");
+    }
+}
+$result_msg_comp = "";
+if (isset($_POST['restore_company'])) {
+    $id = $_POST['id'];
+    $comp_name = $_POST['comp_name'];
+    $query = "UPDATE dbo.tbl_company SET is_deleted = '0' WHERE ID = '$id'";
+    $stmt = sqlsrv_query($db, $query);
+    if ($stmt) {
+        $result_msg_comp = "
+        <div class='alert alert-success'>
+        " . $comp_name . " has been restored
+        </div>
+        ";
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Restored $comp_name - $id','$datetime')");
+    }
+}
+$result_msg_corp = "";
+if (isset($_POST['restore_corp'])) {
+    $id = $_POST['id'];
+    $corp_name = $_POST['corp_name'];
+    $query = "UPDATE dbo.tbl_corporation SET is_deleted = '0' WHERE ID = '$id'";
+    $stmt = sqlsrv_query($db, $query);
+    if ($stmt) {
+        $result_msg_corp = "
+        <div class='alert alert-success'>
+        " . $corp_name . " has been restored
+        </div>
+        ";
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Restored $corp_name - $id','$datetime')");
+    }
+}
+$result_msg_ind  = "";
+if (isset($_POST['restore_ind'])) {
+    $id = $_POST['id'];
+    $ind_name = $_POST['ind_name'];
+    $query = "UPDATE dbo.tbl_shareholder SET is_deleted = '0' WHERE ID = '$id'";
+    $stmt = sqlsrv_query($db, $query);
+    if ($stmt) {
+        $result_msg_ind  = "
+        <div class='alert alert-success'>
+        " . $ind_name . " has been restored
+        </div>
+        ";
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Restored $ind_name - $id','$datetime')");
+    }
+}
+$view_users_res  = "";
+if (isset($_POST['delete_users'])) {
+    $id = $_POST['id'];
+    $full_name = $_POST['full_name'];
+    $query = "UPDATE dbo.users_login SET is_deleted = '1' WHERE id = '$id'";
+    $stmt = sqlsrv_query($db, $query);
+    if ($stmt) {
+        $view_users_res  = "
+        <div class='alert alert-success'>
+        " . $full_name . " has been deleted
+        </div>
+        ";
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Deleted $full_name - $id','$datetime')");
+    }
+}
+$view_del_users_res = "";
+if (isset($_POST['restore_users'])) {
+    $id = $_POST['id'];
+    $full_name = $_POST['full_name'];
+    $query = "UPDATE dbo.users_login SET is_deleted = '0' WHERE id = '$id'";
+    $stmt = sqlsrv_query($db, $query);
+    if ($stmt) {
+        $view_del_users_res = "
+        <div class='alert alert-success'>
+        " . $full_name . " has been restored
+        </div>
+        ";
+        $user_name = $_SESSION['mpic_mpic_name'];
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Restored $full_name - $id','$datetime')");
     }
 }

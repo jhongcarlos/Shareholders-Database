@@ -1,5 +1,8 @@
 <?php
 include('server.php');
+if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] == "Administrator") { } else {
+    header('Location:index');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -172,11 +175,11 @@ include('server.php');
                                 <br />
                                 <label>Registration</label>
                                 <div id="registration_modal"></div>
-                                <input type="button" class="registration_modal_add btn btn-success" value="+" id="registration_modal_add" style="margin-top:3px" />
+                                <input type="button" class="registration_modal_add btn btn-success" value="+ Add Registration" id="registration_modal_add" style="margin-top:3px" />
                                 <br />
                                 <label>Company Affiliation</label>
                                 <div id="comp_affiliate_modal"></div>
-                                <input type="button" class="comp_affiliate_modal_add btn btn-success" value="+" id="comp_affiliate_modal_add" style="margin-top:3px" />
+                                <input type="button" class="comp_affiliate_modal_add btn btn-success" value="+ Add Company Affiliation" id="comp_affiliate_modal_add" style="margin-top:3px" />
                                 <br />
                                 <input type="submit" name="insert_corp_modal" id="insert_corp_modal" value="Insert" class="btn btn-primary" style="float:right" /><br><br>
 
@@ -202,7 +205,7 @@ include('server.php');
                                 <br />
                                 <label>Company Affiliation</label>
                                 <div id="affiliates_corp_modal"></div>
-                                <input type="button" class="add btn btn-success" value="+" id="affiliates_corp_modal_add" style="margin-top:3px" />
+                                <input type="button" class="add btn btn-success" value="+ Add Company Affiliation" id="affiliates_corp_modal_add" style="margin-top:3px" />
                                 <br><br>
                                 <input type="submit" name="insert_sh_modal" id="insert_sh_modal" value="Insert" class="btn btn-primary" style="float:right" /><br><br>
 
@@ -312,7 +315,7 @@ include('server.php');
                 var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
                 var fieldWrapper = $("<div class=\"row\" id=\"field" + intId + "\"/>");
                 fieldWrapper.data("idx", intId);
-                var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Shareholder Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
+                var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Company Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
                     <?php
                     echo "'";
                     $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
@@ -368,7 +371,7 @@ include('server.php');
                 var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
                 var fieldWrapper = $("<div class=\"row\" id=\"field" + intId + "\"/>");
                 fieldWrapper.data("idx", intId);
-                var aff_com = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Shareholder Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
+                var aff_com = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Company Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
                     <?php
                     $sql = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), corporation_name) ASC";
                     $stmt = sqlsrv_query($db, $sql);

@@ -33,6 +33,11 @@ include('../server.php');
         var chart = new OrgChart(document.getElementById("people"), {
             // mouseScrool: OrgChart.action.none,
             // template: "ula",
+            tags: {
+                "Category": {
+                    template: "ula"
+                }
+            },
             slinks: [
                 <?php
                 $sql = "";
@@ -49,7 +54,6 @@ include('../server.php');
                 }
                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                     $arr = explode(",", $row['company_affiliation']);
-                    // echo "<script>console.log('s')</script>";
                     foreach ($arr as $k => $v) {
                         if ($v == "") {
                             $v = 0;
@@ -90,7 +94,12 @@ include('../server.php');
                 field_0: "name",
                 field_1: "TotalShare"
             },
-            nodes: [
+            nodes: [{
+                    id: -1,
+                    pid: null,
+                    tags: ["Category"],
+                    name: '<?= $_GET['cat']; ?>'
+                },
                 <?php
                 $sql = "";
                 $stmt = "";
@@ -99,7 +108,7 @@ include('../server.php');
                     $stmt = sqlsrv_query($db, $sql);
                 } else {
                     $cat = $_GET['cat'];
-                    $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
+                    $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' AND is_deleted LIKE '0' OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
                     $stmt = sqlsrv_query($db, $sql);
                 }
                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
@@ -118,8 +127,8 @@ include('../server.php');
                     },
                 <?php
                 }
-                ?> 
-                
+                ?>
+
             ]
         });
     </script>

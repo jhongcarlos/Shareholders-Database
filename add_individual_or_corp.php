@@ -1,5 +1,8 @@
 <?php
 include('server.php');
+if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] == "Administrator") { } else {
+    header('Location:index');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

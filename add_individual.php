@@ -1,5 +1,8 @@
 <?php
 include('server.php');
+if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] == "Administrator") { } else {
+    header('Location:index');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +58,7 @@ include('server.php');
                         <div class="form-group">
                             <label>Company Affiliation</label>
                             <div id="affiliates"></div>
-                            <input type="button" class="add btn btn-success" value="+" id="add" style="margin-top:3px" />
+                            <input type="button" class="add btn btn-success" value="+ Add Company Affiliation" id="add" style="margin-top:3px" />
                         </div>
                         <button class="btn btn-primary" name="sh_submit">Submit</button>
                     </form>
@@ -69,7 +72,7 @@ include('server.php');
                     var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
                     var fieldWrapper = $("<div class=\"row\" id=\"field" + intId + "\"/>");
                     fieldWrapper.data("idx", intId);
-                    var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Shareholder Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list'><datalist id='sh_list_result'>" +
+                    var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input placeholder='Company Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list'><datalist id='sh_list_result'>" +
                         <?php
                         $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
                         $stmt = sqlsrv_query($db, $sql);

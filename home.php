@@ -178,7 +178,6 @@
             <br><br>
             Cras accumsan fringilla hendrerit. Praesent facilisis turpis id aliquet porta. Proin sed tempus quam. Quisque commodo egestas feugiat. Vivamus vulputate felis vel nisi faucibus tempus. Aliquam at massa elementum, tristique lectus vitae, laoreet enim. Fusce ut nibh eros. Aliquam erat volutpat.
     </div>
-    <?php include('partial/index_footer.php'); ?>
     <script src="js/home.js"></script>
 </body>
 
