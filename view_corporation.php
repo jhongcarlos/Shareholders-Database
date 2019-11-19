@@ -82,7 +82,10 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                     $companies = array();
                                     $sql1 = "SELECT * FROM dbo.tbl_corporation WHERE CONVERT(VARCHAR(MAX), corporation_name) LIKE '%$corp_name%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
                                     $stmt1 = sqlsrv_query($db, $sql1);
+                                    $share = "";
+                                    $typeofshare = "";
                                     while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+
                                         $arr3 = explode(",", $row['company_affiliation']);
                                         $position = 0;
                                         foreach ($arr3 as $key => $value) {
@@ -92,8 +95,11 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             }
                                             $companies[] = $value;
                                         }
+                                        $share = $row['shares_owned'];
+                                        $typeofshare = $row['type_of_share'];
                                     }
                                     foreach ($companies as $k => $v) {
+                                        $num = 0;
                                         $corp_name = "$_GET[corp_name]";
                                         $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(VARCHAR(MAX), company_name) LIKE '%$v%' AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
                                         $stmt = sqlsrv_query($db, $sql);
@@ -102,6 +108,8 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             $arr1 = explode(",", $row['type_of_share']);
                                             $arr2 = explode("|", $row['shares_owned']);
                                             $arr3 = explode(",", $row['company_affiliation']);
+                                            $arr4 = explode("|", $share);
+                                            $arr5 = explode(",", $typeofshare);
                                             $position = "";
                                             foreach ($arr3 as $key => $value) {
                                                 $position = $key;
@@ -110,12 +118,13 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             <tr>
                                                 <td><?= $row['company_name'] ?></td>
                                                 <td>Company</td>
-                                                <td><?= $arr1[$position] ?></td>
-                                                <td><?= $arr2[$position] ?></td>
+                                                <td><?= $arr5[$num] ?></td>
+                                                <td><?= $arr4[$num] ?></td>
                                                 <td><a href='view_company.php?comp_name=<?= $row['company_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
                                             </tr>
                                 <?php
                                         }
+                                        $num += 1;
                                     }
                                 } ?>
                             </tbody>

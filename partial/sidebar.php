@@ -2,13 +2,13 @@
     <!-- Sidebar Holder -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <img src="images/MPIC_logo.png" alt="" class="img-responsive logo">
+            <a href="home"><img src="images/MPIC_logo.png" alt="" class="img-responsive logo"></a>
         </div>
 
         <ul class="list-unstyled components">
             <p>Hello, <?= $_SESSION['mpic_mpic_name']; ?></p>
             <li>
-                <a href="index">Home</a>
+                <a href="index"><i class="fa fa-home"></i> Home</a>
             </li>
             <?php
             if ($_SESSION['mpic_mpic_role'] == "Viewer" || $_SESSION['mpic_mpic_role'] == "Site Admin") { } else {
@@ -54,8 +54,8 @@
                     <li><a href="#"><i class="fa fa-bolt"></i> Power</a></li>
                     <li><a href="#"><i class="fa fa-tint"></i> Water</a></li>
                     <li><a href="#"><i class="fa fa-train"></i> Rail</a></li>
-                    <li><a target="blank" href="partial/test_chart?cat=Tollways"><i class="fa fa-road"></i> Tollways</a></li>
-                    <li><a target="blank" href="partial/test_chart?cat=Logistics"><i class="fa fa-truck"></i> Logistics</a></li>
+                    <li class="cursor-active"><a type="button" data-toggle="modal" data-target="#modal_tollways"><i class="fa fa-road"></i> Tollways</a></li>
+                    <li class="cursor-active"><a type="button" data-toggle="modal" data-target="#modal_logistics"><i class="fa fa-truck"></i> Logistics</a></li>
                     <li><a href="#"><i class="fa fa-hospital-o"></i> Hospital</a></li>
                     <li><a href="#">Others</a></li>
                 </ul>

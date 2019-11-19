@@ -790,7 +790,7 @@ if (isset($_POST['edit_company_submit'])) {
         </div>
         ";
         $user_name = $_SESSION['mpic_mpic_name'];
-        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Edited Company - $c_name','$datetime')");
+        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Edited Company - $comp_name','$datetime')");
     }
 }
 $result_msg_comp = "";

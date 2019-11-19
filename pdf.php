@@ -10,12 +10,14 @@ function fetch_data()
         <table align="center" border="1">
         <tr>
         <th width="15%"><b>ID</b></th>
-        <th width="45%"><b>Shareholder Name</b></th>
+        <th width="45%"><b>Company Name</b></th>
         <th width="15%"><b>Type of Share</b></th>
         <th width="25%"><b>Shares Owned</b></th>
         </tr>
         ';
   $companies = array();
+  $share = "";
+  $typeofshare = "";
   $sql1 = "SELECT * FROM dbo.tbl_corporation 
   WHERE CONVERT(VARCHAR(MAX), corporation_name) = '$corp_name' 
   AND CONVERT(VARCHAR(MAX), is_deleted) = '0'";
@@ -34,10 +36,13 @@ function fetch_data()
       }
       $companies[] = $value;
     }
+    $share = $row['shares_owned'];
+    $typeofshare = $row['type_of_share'];
     // }
   }
   // $output .= $corp_name;
   foreach ($companies as $k => $v) {
+    $num = 0;
     $sql = "SELECT * FROM dbo.tbl_company 
   WHERE CONVERT(VARCHAR(MAX), company_name) 
   LIKE '%$v%' 
@@ -48,6 +53,8 @@ function fetch_data()
       $arr1 = explode(",", $row['type_of_share']);
       $arr2 = explode("|", $row['shares_owned']);
       $arr3 = explode(",", $row['company_affiliation']);
+      $arr4 = explode("|", $share);
+      $arr5 = explode(",", $typeofshare);
       $position = "";
       foreach ($arr3 as $key => $value) {
         // if ($value == $_GET['corp_name']) {
@@ -59,10 +66,11 @@ function fetch_data()
         <tr>
           <td>' . $row['ID'] . '</td>
           <td>' . $row['company_name'] . '</td>
-          <td>' . $arr1[$position] . '</td>
-          <td>' . $arr2[$position] . '</td>
+          <td>' . $arr5[$num] . '</td>
+          <td>' . $arr4[$num] . '</td>
         </tr>';
     }
+    $num += 1;
   }
 
   $output .= '
@@ -230,7 +238,7 @@ function individual_fetch_data()
         <table align="center" border="1">
         <tr>
         <th width="15%"><b>ID</b></th>
-        <th width="45%"><b>Shareholder Name</b></th>
+        <th width="45%"><b>Company Name</b></th>
         <th width="15%"><b>Type of Share</b></th>
         <th width="25%"><b>Shares Owned</b></th>
         </tr>
@@ -248,15 +256,20 @@ function individual_fetch_data()
     $arr3 = explode(",", $row['company_affiliation']);
 
     $position = "";
+    $share = "";
+    $typeofshare = "";
     foreach ($arr3 as $key => $value) {
       // if ($value == $ind_id) {
       $position = $key;
       // }
       $companies[] = $value;
+      $share = $row['shares_owned'];
+      $typeofshare = $row['type_of_shares'];
     }
     // }
   }
   // $output .= $corp_name;
+  $num = 0;
   foreach ($companies as $k => $v) {
     $sql = "SELECT * FROM dbo.tbl_company 
   WHERE CONVERT(VARCHAR(MAX), company_name) 
@@ -268,6 +281,8 @@ function individual_fetch_data()
       $arr1 = explode(",", $row['type_of_share']);
       $arr2 = explode("|", $row['shares_owned']);
       $arr3 = explode(",", $row['company_affiliation']);
+      $arr4 = explode("|", $share);
+      $arr5 = explode(",", $typeofshare);
       $position = "";
       foreach ($arr3 as $key => $value) {
         // if ($value == $_GET['corp_name']) {
@@ -279,10 +294,11 @@ function individual_fetch_data()
         <tr>
           <td>' . $row['ID'] . '</td>
           <td>' . $row['company_name'] . '</td>
-          <td>' . $arr1[$position] . '</td>
-          <td>' . $arr2[$position] . '</td>
+          <td>' . $arr5[$num] . '</td>
+          <td>' . $arr4[$num] . '</td>
         </tr>';
     }
+    $num += 1;
   }
 
   $output .= '
@@ -331,9 +347,11 @@ if (isset($_POST["ind_pdf"])) {
 // ============
 function audit_trail_fetch_data()
 {
-
-  $conn_info = array("Database" => "test_db");
-  $db = sqlsrv_connect('MPIC-BACKUP-02', $conn_info);
+  // SELECT * 
+  // FROM dbo.tbl_audit_trail
+  // WHERE update_time 
+  // BETWEEN '2019-11-18 00:00:00' 
+  // AND '2019-12-18 23:59:59'
   $output = '';
   $output .= '
         <table border="1">
@@ -344,30 +362,14 @@ function audit_trail_fetch_data()
         <th width="25%"><b> Date/Time</b></th>
         </tr>
         ';
-  $sql = "SELECT * FROM dbo.tbl_audit_trail ORDER BY ID DESC";
-  $stmt = sqlsrv_query($db, $sql);
-
-  while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) { 
-    $output.='
-    <tr>
-    <td> '.$row['ID'].'</td>
-    <td> '.$row['user_name'].'</td>
-    <td> '.$row['description'].'</td>
-    <td> '.$row['update_time'].'</td>
-</tr>
-    ';
-  }
-
-  $output .= '
-            
-  </table>
-  </div>
-  ';
   return $output;
 }
 
 if (isset($_POST["at_pdf"])) {
   include('server.php');
+
+  $startDate = $_POST['startDate'];
+  $endDate = $_POST['endDate'];
 
   require_once('tcpdf/tcpdf.php');
   $obj_pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -389,6 +391,39 @@ if (isset($_POST["at_pdf"])) {
               <div>
               ';
   $content .= audit_trail_fetch_data();
+  // ====
+
+  if(empty($_POST['startDate']) AND empty($_POST['endDate'])){
+    $sql = "SELECT * 
+    FROM dbo.tbl_audit_trail ORDER BY ID DESC";
+  }
+  else{
+    $sql = "SELECT * 
+  FROM dbo.tbl_audit_trail
+  WHERE update_time 
+  BETWEEN '$startDate 00:00:00' 
+  AND '$endDate 23:59:59' ORDER BY ID DESC";
+  }
+
+  $stmt = sqlsrv_query($db, $sql);
+
+  while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+    $Date = $row['update_time']->format('m-d-Y h:i A');
+    $content .= '
+    <tr>
+    <td> ' . $row['ID'] . '</td>
+    <td> ' . $row['user_name'] . '</td>
+    <td> ' . $row['description'] . '</td>
+    <td> ' . $Date . '</td>
+</tr>
+    ';
+  }
+  $content .= '
+  </table>
+  </div>
+  ';
+
+  // ====
   // $content .= '</table>';  
   $obj_pdf->writeHTML($content);
   ob_end_clean();

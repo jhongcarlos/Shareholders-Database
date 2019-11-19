@@ -124,7 +124,7 @@ elseif ($_SESSION['mpic_mpic_role'] == "Site Admin" and $comp_id == $_SESSION['e
                                 <?php } ?>
                                 <div class="row">
                                     <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
-                                        <label for='f_name'>Company Affiliation</label>
+                                        <label for='f_name'>Shareholder Name</label>
                                         <!-- <input type="text" autocomplete="off" name="aff_comp[]" class="form-control" required value="<?= $company_affiliation[$i] ?>"> -->
                                         <input class='form-control' value="<?= $company_affiliation[$i] ?>" list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'>
                                         <datalist id='sh_list_result'>
@@ -205,7 +205,7 @@ elseif ($_SESSION['mpic_mpic_role'] == "Site Admin" and $comp_id == $_SESSION['e
                 var dir_off = $("<div class='col-md-5 col-xs-5 col-xl-5 col-sm-5'><label for='f_name'>Directors/Officers</label><input class='form-control' type='text' name='dir_off[]' class='form-control' /></div>");
                 var do_position = $("<div class='col-md-5 col-xs-5 col-xl-5 col-sm-5'><label for='f_name'>Position</label><input class='form-control' type='text' name='do_position[]' class='form-control'/></div>");
                 // var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><label for='f_name'>Company Affiliation</label><input class='form-control' type='text' name='aff_comp[]' class='form-control'/></div>");
-                var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><label for='f_name'>Company Affiliation</label><input placeholder='Company Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
+                var aff_comp = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><label for='f_name'>Shareholder</label><input placeholder='Company Name' class='form-control' list='sh_list_result' name='aff_comp[]' id='sh_list' onclick='comp_validation()'><datalist id='sh_list_result'>" +
                     <?php
                     echo "'";
                     $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";

@@ -33,18 +33,19 @@
 </head>
 
 <body>
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-           
-          
-         <div class="navbar-left logo"> 
-          </div>
-		<h1 class="brand brand-name navbar-left"><div class="navbar-left">
-            <img src="images/MPIC_logo.png" alt="">
-        </h1>
-        </div>
-        <!-- <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+
+
+                <div class="navbar-left logo">
+                </div>
+                <h1 class="brand brand-name navbar-left">
+                    <div class="navbar-left">
+                        <img src="images/MPIC_logo.png" alt="">
+                </h1>
+            </div>
+            <!-- <div class="collapse navbar-collapse navbar-right" id="myNavbar">
             <ul class="nav navbar-nav">
                 <li><a href="#intro">Home</a></li>
    				<li><a href="#about">About</a></li>
@@ -52,8 +53,8 @@
     			<li><a href="#contact">Reserve</a></li>
             </ul>
         </div> -->
-    </div>
-</nav>
+        </div>
+    </nav>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <h2 class="display-4 text-center text-white">OUR COMPANY</h2>
@@ -179,6 +180,25 @@
             Cras accumsan fringilla hendrerit. Praesent facilisis turpis id aliquet porta. Proin sed tempus quam. Quisque commodo egestas feugiat. Vivamus vulputate felis vel nisi faucibus tempus. Aliquam at massa elementum, tristique lectus vitae, laoreet enim. Fusce ut nibh eros. Aliquam erat volutpat.
     </div>
     <script src="js/home.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.3/lib/darkmode-js.min.js"></script>
+    <script>
+        var options = {
+            bottom: '32px', // default: '32px'
+            right: '32px', // default: '32px'
+            left: 'unset', // default: 'unset'
+            time: '0.5s', // default: '0.3s'
+            mixColor: '#fff', // default: '#fff'
+            backgroundColor: '#fff', // default: '#fff'
+            buttonColorDark: '#100f2c', // default: '#100f2c'
+            buttonColorLight: '#fff', // default: '#fff'
+            saveInCookies: false, // default: true,
+            label: '🌓', // default: ''
+            autoMatchOsTheme: true // default: true
+        }
+
+        const darkmode = new Darkmode(options);
+        darkmode.showWidget();
+    </script>
 </body>
 
 </html>

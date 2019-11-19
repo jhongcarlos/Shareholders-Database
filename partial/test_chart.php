@@ -13,8 +13,8 @@ include('../server.php');
     <script src="https://balkangraph.com/js/latest/OrgChart.js"></script>
 
     <title><?php if (!empty($_GET['cat'])) {
-                echo $_GET['cat'];
-            } ?> - Graphical Report</title>
+                echo $_GET['cat'] . ' - ';
+            } ?>Graphical Report</title>
 </head>
 
 <body>
@@ -33,11 +33,38 @@ include('../server.php');
         var chart = new OrgChart(document.getElementById("people"), {
             // mouseScrool: OrgChart.action.none,
             // template: "ula",
+            <?php
+            if (empty($_GET)) {
+                echo '
+                tags: {
+                    "Category": {
+                        template: "ula"
+                    }
+                },
+                ';
+            } else {
+
+                if ($_GET['type'] == "External") {
+                    // ====
+                    echo ' 
+            template: "ula",
+            tags: {
+                "Category": {
+                    template: "ana"
+                }
+            },
+            orientation: OrgChart.orientation.left,';
+                } elseif ($_GET['type'] == "Internal") {
+                    echo ' 
             tags: {
                 "Category": {
                     template: "ula"
                 }
-            },
+            },';
+                }
+            }
+            // ====
+            ?>
             slinks: [
                 <?php
                 $sql = "";
@@ -98,7 +125,13 @@ include('../server.php');
                     id: -1,
                     pid: null,
                     tags: ["Category"],
-                    name: '<?= $_GET['cat']; ?>'
+                    name: '<?php
+                            if (empty($_GET)) {
+                                echo "All";
+                            } else {
+                                echo $_GET['cat'];
+                            }
+                            ?>'
                 },
                 <?php
                 $sql = "";
@@ -108,7 +141,12 @@ include('../server.php');
                     $stmt = sqlsrv_query($db, $sql);
                 } else {
                     $cat = $_GET['cat'];
-                    $sql = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' AND is_deleted LIKE '0' OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
+                    $type = $_GET['type'];
+                    $sql = "SELECT * FROM dbo.tbl_company 
+                    WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' 
+                    AND is_deleted LIKE '0' 
+                    AND CONVERT(NVARCHAR(MAX), internal_external) = N'$type'
+                    OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
                     $stmt = sqlsrv_query($db, $sql);
                 }
                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {

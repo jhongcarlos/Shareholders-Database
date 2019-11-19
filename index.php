@@ -35,7 +35,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
 <body>
 
     <?php include("partial/sidebar.php"); ?>
-
     <!-- <div class="container-fluid"><br> -->
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#company">Company</a></li>
@@ -159,7 +158,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             <?php
                                                 if ($_SESSION['mpic_mpic_role'] == "Viewer" || $_SESSION['mpic_mpic_role'] == "Site Admin") { } else {
                                                     ?>
-                                                   <button class="btn btn-warning" name="c_edit" title="Edit"><i class="fa fa-edit"></i></button>
+                                                <button class="btn btn-warning" name="c_edit" title="Edit"><i class="fa fa-edit"></i></button>
                                                 <button class="btn btn-danger" onclick="return confirmation()" name="c_delete" title="Delete"><i class="fa fa-trash"></i></button>
                                             <?php } ?>
                                         </form>
@@ -192,7 +191,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Internal / External</th>
                                 <th>Held Position</th>
                                 <th>Shares Owned</th>
                                 <th>Type of Shares</th>
@@ -210,7 +208,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                 <tr>
                                     <td><?= $row['ID'] ?></td>
                                     <td><?= $row['first_name'] . ' ' . $row['last_name'] ?></td>
-                                    <td><?= str_replace(',', '<br />', $row['internal_external']) ?></td>
                                     <td><?= str_replace(',', '<br />', $row['held_position']) ?></td>
                                     <td><?= str_replace('|', '<br />', $row['shares_owned']) ?></td>
                                     <td><?= str_replace(',', '<br />', $row['type_of_shares']) ?></td>
