@@ -79,6 +79,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
             </div>
         </div>
     </div>
+    <?php include('partial/index_footer.php'); ?>
     <script>
         function confirmation() {
             if (!confirm("Are you sure you want to restore?")) {
@@ -89,7 +90,6 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
             $('#tbl_users').DataTable({});
         });
     </script>
-    <?php include('partial/index_footer.php'); ?>
 </body>
 
 </html>

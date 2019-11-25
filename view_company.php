@@ -1,5 +1,6 @@
 <?php
 include('server.php');
+$_SESSION['tmp_comp'] = $_GET['comp_name'];
 if (empty($_SESSION['mpic_mpic_name'])) {
     header('Location:login');
 }
@@ -74,6 +75,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                 <th>Type</th>
                                 <th>Type of Share</th>
                                 <th>Shares Owned</th>
+                                <th>Stock Certificate</th>
                                 <th>Action</th>
                             </thead>
                             <tbody>
@@ -83,7 +85,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                         $arr = explode(",", $row['ID']);
                                         $arr1 = explode(",", $row['type_of_shares']);
                                         $arr2 = explode("|", $row['shares_owned']);
-                                        $arr3 = explode(",", $row['company_affiliation']);
+                                        $arr3 = explode("|", $row['company_affiliation']);
                                         $position = "";
                                         foreach ($arr3 as $key => $value) {
                                             if ($value == $_GET['comp_name']) {
@@ -99,6 +101,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             <td>Individual</td>
                                             <td><?= $arr1[$position] ?></td>
                                             <td><?= $arr2[$position] ?></td>
+                                            <td><input type="button" name="view" value="view" id="<?php echo $row["ID"]; ?>" class="btn btn-primary btn-xs view_data" /></td>
                                             <td><a href="view_shareholder.php?sh_id=<?= $row['ID'] ?>" class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
                                         </tr>
                                     <?php
@@ -111,7 +114,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             $arr = explode(",", $row['ID']);
                                             $arr1 = explode(",", $row['type_of_share']);
                                             $arr2 = explode("|", $row['shares_owned']);
-                                            $arr3 = explode(",", $row['company_affiliation']);
+                                            $arr3 = explode("|", $row['company_affiliation']);
                                             $position = "";
                                             foreach ($arr3 as $key => $value) {
                                                 if ($value == $_GET['comp_name']) {
@@ -123,10 +126,13 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             <td>Corporation</td>
                                             <td><?= $arr1[$position] ?></td>
                                             <td><?= $arr2[$position] ?></td>
+                                            <td>
+                                                <input type="button" name="view" value="view" id="<?php echo $row["ID"]; ?>" class="btn btn-primary btn-xs view_data_corp" />
+                                            </td>
                                             <td><a href='view_corporation.php?corp_name=<?= $row['corporation_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
                                         </tr>
-                                    <?php
-                                        }
+                                <?php
+                                    }
                                 } ?>
                             </tbody>
                         </table>
@@ -135,6 +141,8 @@ if (empty($_SESSION['mpic_mpic_name'])) {
             </div>
         </div>
     </div>
+
+    <?php include('partial/index_footer.php'); ?>
     <script>
         $(document).ready(function() {
             $('#tbl_comp').DataTable({
@@ -144,8 +152,43 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                 // ]
             });
         });
+        $(document).on('click', '.view_data', function() {
+            var ind_id = $(this).attr("id");
+            var comp_nam = "<?php echo $_SESSION['tmp_comp'] ?>";
+            if (ind_id != '') {
+                $.ajax({
+                    url: "server.php",
+                    method: "POST",
+                    data: {
+                        ind_id: ind_id,
+                        comp_nam: comp_nam
+                    },
+                    success: function(data) {
+                        $('#ind_detail').html(data);
+                        $('#indModal').modal('show');
+                    }
+                });
+            }
+        });
+        $(document).on('click', '.view_data_corp', function() {
+            var corp_id = $(this).attr("id");
+            var comp_nam = "<?php echo $_SESSION['tmp_comp'] ?>";
+            if (corp_id != '') {
+                $.ajax({
+                    url: "server.php",
+                    method: "POST",
+                    data: {
+                        corp_id: corp_id,
+                        comp_nam: comp_nam
+                    },
+                    success: function(data) {
+                        $('#corp_detail').html(data);
+                        $('#corpModal').modal('show');
+                    }
+                });
+            }
+        });
     </script>
-    <?php include('partial/index_footer.php'); ?>
 </body>
 
 </html>

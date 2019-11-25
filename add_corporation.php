@@ -36,6 +36,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                 <div class="col-sm-12 form-legend">
                     <a href="index">← Home</a>
                     <h2>Add a Corporation</h2>
+                    <?= $add_corp_res; ?>
                 </div>
                 <div class="col-sm-12 form-column">
                     <form method="post" enctype="multipart/form-data">
@@ -82,6 +83,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                 </div>
             </div>
         </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
         <script>
             $(document).ready(function() {
                 $("#add").click(function() {

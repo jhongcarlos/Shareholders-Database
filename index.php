@@ -82,6 +82,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                     <td><?= $row['ID'] ?></td>
                                     <td><?= $row['company_name'] ?></td>
                                     <td><span><b>SEC Number: </b></span><?= $row['sec_num'] ?><br><span><b>TIN Number: </b></span><?= $row['tin_num'] ?></td>
+                                    </td>
                                     <td><?= str_replace('|', '<br />', $row['total_shares']) ?></td>
                                     <td><?= $row['last_update'] ?></td>
                                     <td>
@@ -270,6 +271,22 @@ if (empty($_SESSION['mpic_mpic_name'])) {
             // buttons: [
             //     'copy', 'csv', 'excel', 'pdf', 'print'
             // ]
+        });
+        $(document).on('click', '.view_data', function() {
+            var comp_id = $(this).attr("id");
+            if (comp_id != '') {
+                $.ajax({
+                    url: "server.php",
+                    method: "POST",
+                    data: {
+                        comp_id: comp_id
+                    },
+                    success: function(data) {
+                        $('#comp_detail').html(data);
+                        $('#compModal').modal('show');
+                    }
+                });
+            }
         });
     </script>
 </body>

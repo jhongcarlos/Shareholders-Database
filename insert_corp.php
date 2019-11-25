@@ -80,7 +80,7 @@ if (empty($_POST['aff_comp'])) {
         $do_position_h .= $value;
     }
     foreach ($aff_comp as $key => $value) {
-        if ($aff_com_h) $aff_com_h .= ',';
+        if ($aff_com_h) $aff_com_h .= '|';
         $aff_com_h .= $value;
     }
     foreach ($type_of_shares as $key => $value) {

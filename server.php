@@ -64,6 +64,7 @@ if (isset($_POST['test_submit'])) {
         echo "<script>alert('" . $value . "')</script>";
     }
 }
+$add_ind_res = "";
 if (isset($_POST['sh_submit'])) {
 
     $first_name = $_POST['first_name'];
@@ -82,7 +83,11 @@ if (isset($_POST['sh_submit'])) {
             '$datetime',
             '0')";
         $stmt = sqlsrv_query($db, $sql);
-        echo "<script>alert('Success!')</script>";
+        $add_ind_res = "
+            <div class='alert alert-success'>
+            " . $first_name . ' ' . $last_name . " has been created
+            </div>
+            ";
         $user_name = $_SESSION['mpic_mpic_name'];
         $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Individual - $first_name $last_name','$datetime')");
     } else {
@@ -118,7 +123,7 @@ if (isset($_POST['sh_submit'])) {
             }
         }
         foreach ($aff_comp as $key => $value) {
-            if ($aff_comp_h) $aff_comp_h .= ',';
+            if ($aff_comp_h) $aff_comp_h .= '|';
             $aff_comp_h .= $value;
         }
         foreach ($held_position as $key => $value) {
@@ -164,11 +169,16 @@ if (isset($_POST['sh_submit'])) {
             '$datetime',
             '0')";
         $stmt = sqlsrv_query($db, $sql);
-        echo "<script>alert('Success!')</script>";
+        $add_ind_res = "
+            <div class='alert alert-success'>
+            " . $first_name . ' ' . $last_name . " has been created
+            </div>
+            ";
         $user_name = $_SESSION['mpic_mpic_name'];
         $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Individual - $first_name $last_name','$datetime')");
     }
 }
+$add_corp_res = "";
 if (isset($_POST['corp_submit'])) {
 
     $c_name = $_POST['c_name'];
@@ -189,7 +199,11 @@ if (isset($_POST['corp_submit'])) {
                 '0')";
         $stmt = sqlsrv_query($db, $sql);
         if ($stmt) {
-            echo "<script>alert('Sucess')</script>";
+            $add_corp_res = "
+            <div class='alert alert-success'>
+            " . $c_name . " has been created
+            </div>
+            ";
             $user_name = $_SESSION['mpic_mpic_name'];
             $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Coporation - $c_name','$datetime')");
         }
@@ -242,7 +256,7 @@ if (isset($_POST['corp_submit'])) {
             $do_position_h .= $value;
         }
         foreach ($aff_comp as $key => $value) {
-            if ($aff_com_h) $aff_com_h .= ',';
+            if ($aff_com_h) $aff_com_h .= '|';
             $aff_com_h .= $value;
         }
         foreach ($type_of_shares as $key => $value) {
@@ -285,7 +299,11 @@ if (isset($_POST['corp_submit'])) {
                 '0')";
         $stmt = sqlsrv_query($db, $sql);
         if ($stmt) {
-            echo "<script>alert('Sucess')</script>";
+            $add_corp_res = "
+            <div class='alert alert-success'>
+            " . $c_name . " has been created
+            </div>
+            ";
             $user_name = $_SESSION['mpic_mpic_name'];
             $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Corporation - $c_name','$datetime')");
         }
@@ -373,7 +391,7 @@ if (isset($_POST['edit_individual_submit'])) {
     //     }
     // }
     foreach ($aff_comp as $key => $value) {
-        if ($aff_comp_h) $aff_comp_h .= ',';
+        if ($aff_comp_h) $aff_comp_h .= '|';
         $aff_comp_h .= $value;
     }
     foreach ($internal_external as $key => $value) {
@@ -458,7 +476,7 @@ if (isset($_POST['edit_corporation_submit'])) {
         $do_position_h .= $value;
     }
     foreach ($aff_comp as $key => $value) {
-        if ($aff_comp_h) $aff_comp_h .= ',';
+        if ($aff_comp_h) $aff_comp_h .= '|';
         $aff_comp_h .= $value;
     }
     foreach ($type_of_shares as $key => $value) {
@@ -504,7 +522,10 @@ if (isset($_POST['btn_register'])) {
     $middle_name = $_POST['middle_name'];
     $email = $_POST['email'];
     $role = $_POST['role'];
-    $will_handle = $_POST['will_handle'];
+    $will_handle = "";
+    if ($_POST['will_handle']) {
+        $will_handle = $_POST['will_handle'];
+    }
     $password = md5($_POST['password']);
 
     $sql = "SELECT * FROM dbo.users_login WHERE CONVERT(NVARCHAR(MAX), email) = '$email'";
@@ -531,7 +552,8 @@ if (isset($_POST['btn_register'])) {
             '$email',
             '$password',
             '$will_handle',
-            '$datetime')";
+            '$datetime',
+            '0')";
 
         $stmt1 = sqlsrv_query($db, $sql1);
         if ($stmt1) {
@@ -540,6 +562,8 @@ if (isset($_POST['btn_register'])) {
                     Account Registered
                 </div>
                 ";
+        } else {
+            die(print_r(sqlsrv_errors(), true));
         }
     }
 }
@@ -567,6 +591,7 @@ if (isset($_POST['btn_forgot_password_reset'])) {
         header('Location:login');
     }
 }
+$add_comp_res = "";
 if (isset($_POST['comp_submit'])) {
 
     $c_name = $_POST['co_name'];
@@ -594,7 +619,11 @@ if (isset($_POST['comp_submit'])) {
                 '0')";
         $stmt = sqlsrv_query($db, $sql);
         if ($stmt) {
-            echo "<script>alert('Company Added')</script>";
+            $add_comp_res = "
+            <div class='alert alert-success'>
+            " . $c_name . " has been created
+            </div>
+            ";
             $user_name = $_SESSION['mpic_mpic_name'];
             $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Company - $c_name','$datetime')");
         }
@@ -642,7 +671,7 @@ if (isset($_POST['comp_submit'])) {
             $do_position_h .= $value;
         }
         foreach ($aff_comp as $key => $value) {
-            if ($aff_com_h) $aff_com_h .= ',';
+            if ($aff_com_h) $aff_com_h .= '|';
             $aff_com_h .= $value;
         }
         foreach ($type_of_shares as $key => $value) {
@@ -673,13 +702,13 @@ if (isset($_POST['comp_submit'])) {
                 '$tin_num',
                 '$total_num_shares',
                 '$category',
-                '$int_ext',
                 '$address',
                 '$aff_com_h',
                 '$dir_off_h',
                 '$do_position_h',
                 '$shares_owned_h',
                 '$type_of_shares_h',
+                '$int_ext',
                 '$stocks_cert_h',
                 '$remarks_h',
                 '$datetime',
@@ -687,7 +716,11 @@ if (isset($_POST['comp_submit'])) {
                 '0')";
         $stmt = sqlsrv_query($db, $sql);
         if ($stmt) {
-            echo "<script>alert('Company Added')</script>";
+            $add_comp_res = "
+            <div class='alert alert-success'>
+            " . $c_name . " has been created
+            </div>
+            ";
             $user_name = $_SESSION['mpic_mpic_name'];
             $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Company - $c_name','$datetime')");
         }
@@ -726,6 +759,8 @@ if (isset($_POST['edit_company_submit'])) {
     $tin_num = $_POST['tin_num'];
     $address = $_POST['address'];
     $total_shares = $_POST['total_shares'];
+    $category = $_POST['category'];
+    $internal_external = $_POST['internal_external'];
 
     // array variables
     $dir_off = $_POST['dir_off'];
@@ -752,7 +787,7 @@ if (isset($_POST['edit_company_submit'])) {
         $do_position_h .= $value;
     }
     foreach ($aff_comp as $key => $value) {
-        if ($aff_comp_h) $aff_comp_h .= ',';
+        if ($aff_comp_h) $aff_comp_h .= '|';
         $aff_comp_h .= $value;
     }
     foreach ($type_of_shares as $key => $value) {
@@ -773,12 +808,14 @@ if (isset($_POST['edit_company_submit'])) {
     sec_num = '$sec_num',
     tin_num = '$tin_num',
     total_shares = '$total_shares',
+    category = '$category',
     address = '$address',
     company_affiliation = '$aff_comp_h',
     director_officer = '$dir_off_h',
     do_position = '$do_position_h',
     shares_owned = '$shares_owned_h',
     type_of_share = '$type_of_shares_h',
+    internal_external = '$internal_external',
     remarks = '$remarks_h',
     last_update = '$datetime'
     WHERE ID = $id";
@@ -871,5 +908,55 @@ if (isset($_POST['restore_users'])) {
         ";
         $user_name = $_SESSION['mpic_mpic_name'];
         $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Restored $full_name - $id','$datetime')");
+    }
+}
+// Show cert shareholder
+if (isset($_POST["ind_id"])) {
+    $id = $_POST['ind_id'];
+    $comp_nam = $_POST['comp_nam'];
+
+    $sql = "SELECT * FROM dbo.tbl_shareholder WHERE ID LIKE '$id'";
+    $stmt = sqlsrv_query($db, $sql);
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        $comp_aff = $row['company_affiliation'];
+        $cert = $row['stocks_certificate'];
+        $full_name = $row['first_name'] . ' ' . $row['last_name'];
+        $comp_aff_h = explode("|", $comp_aff);
+        $cert_h = explode(",", $cert);
+
+        foreach ($comp_aff_h as $v) {
+            if ($v == $comp_nam) {
+                echo "<p>" . $full_name . "</p>";
+                foreach ($cert_h as $va) {
+                    echo '<img src="images/' . $va . '" class="img-responsive">';
+                }
+            }
+        }
+    }
+}
+// Show cert Corporation
+if (isset($_POST["corp_id"])) {
+    $id = $_POST['corp_id'];
+    $comp_nam = $_POST['comp_nam'];
+
+    $sql = "SELECT * FROM dbo.tbl_corporation WHERE ID LIKE '$id'";
+    $stmt = sqlsrv_query($db, $sql);
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        $comp_aff = $row['company_affiliation'];
+        $cert = $row['stock_certificate'];
+        $corp_name = $row['corporation_name'];
+        $comp_aff_h = explode("|", $comp_aff);
+        $cert_h = explode(",", $cert);
+
+        foreach ($comp_aff_h as $v) {
+            if ($v == $comp_nam) {
+                echo "<p>" . $corp_name . "</p>";
+                foreach ($cert_h as $va) {
+                    echo '<img src="images/' . $va . '" class="img-responsive">';
+                }
+            }
+        }
     }
 }

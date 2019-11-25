@@ -86,7 +86,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                     $typeofshare = "";
                                     while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
 
-                                        $arr3 = explode(",", $row['company_affiliation']);
+                                        $arr3 = explode("|", $row['company_affiliation']);
                                         $position = 0;
                                         foreach ($arr3 as $key => $value) {
                                             if ($value == $_GET['corp_name']) {
@@ -107,7 +107,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             $arr = explode(",", $row['ID']);
                                             $arr1 = explode(",", $row['type_of_share']);
                                             $arr2 = explode("|", $row['shares_owned']);
-                                            $arr3 = explode(",", $row['company_affiliation']);
+                                            $arr3 = explode("|", $row['company_affiliation']);
                                             $arr4 = explode("|", $share);
                                             $arr5 = explode(",", $typeofshare);
                                             $position = "";

@@ -82,10 +82,9 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                 <tbody>
                                     <?php
                                         foreach ($companies as $k => $v) {
-                                            $comp = explode(",", $v);
+                                            $comp = explode("|", $v);
                                             $num = 0;
                                             foreach ($comp as $value) {
-
                                                 $sql = "SELECT * FROM dbo.tbl_company 
                                                 WHERE CONVERT(VARCHAR(MAX), company_name) 
                                                 LIKE '%$value%' 
@@ -96,7 +95,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                                     $arr = explode(",", $row['ID']);
                                                     $arr1 = explode(",", $row['type_of_share']);
                                                     $arr2 = explode("|", $row['shares_owned']);
-                                                    $arr3 = explode(",", $row['company_affiliation']);
+                                                    $arr3 = explode("|", $row['company_affiliation']);
                                                     $arr4 = explode("|", $share);
                                                     $arr5 = explode("," , $typeofshare);
                                                     $position = "";
@@ -129,6 +128,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
             <?php
             ?>
     </div>
+    <?php include('partial/index_footer.php'); ?>
     <script>
         $(document).ready(function() {
             $('#tbl_ind').DataTable({
@@ -139,7 +139,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
             });
         });
     </script>
-    <?php include('partial/index_footer.php'); ?>
 </body>
 
 </html>

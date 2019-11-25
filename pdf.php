@@ -27,7 +27,7 @@ function fetch_data()
     // if (strpos($row['company_affiliation'], $corp_name) !== false) {
     $arr = explode(",", $row['type_of_share']);
     $arr2 = explode("|", $row['shares_owned']);
-    $arr3 = explode(",", $row['company_affiliation']);
+    $arr3 = explode("|", $row['company_affiliation']);
 
     $position = "";
     foreach ($arr3 as $key => $value) {
@@ -52,7 +52,7 @@ function fetch_data()
       $arr = explode(",", $row['ID']);
       $arr1 = explode(",", $row['type_of_share']);
       $arr2 = explode("|", $row['shares_owned']);
-      $arr3 = explode(",", $row['company_affiliation']);
+      $arr3 = explode("|", $row['company_affiliation']);
       $arr4 = explode("|", $share);
       $arr5 = explode(",", $typeofshare);
       $position = "";
@@ -132,7 +132,7 @@ function comp_fetch_data()
     if (strpos($row['company_affiliation'], $comp_name) !== false) {
       $arr = explode(",", $row['type_of_shares']);
       $arr2 = explode("|", $row['shares_owned']);
-      $arr3 = explode(",", $row['company_affiliation']);
+      $arr3 = explode("|", $row['company_affiliation']);
       $position = "";
       foreach ($arr3 as $key => $value) {
         if ($value == $comp_name) {
@@ -154,7 +154,7 @@ function comp_fetch_data()
   while ($row = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
     $arr = explode(",", $row['type_of_share']);
     $arr2 = explode("|", $row['shares_owned']);
-    $arr3 = explode(",", $row['company_affiliation']);
+    $arr3 = explode("|", $row['company_affiliation']);
     $position = "";
     foreach ($arr3 as $key => $value) {
       if ($value == $comp_name) {
@@ -175,7 +175,7 @@ function comp_fetch_data()
   while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
     $arr = explode(",", $row['type_of_share']);
     $arr2 = explode("|", $row['shares_owned']);
-    $arr3 = explode(",", $row['company_affiliation']);
+    $arr3 = explode("|", $row['company_affiliation']);
     $position = "";
     foreach ($arr3 as $key => $value) {
       if ($value == $comp_name) {
@@ -253,7 +253,7 @@ function individual_fetch_data()
     // if (strpos($row['company_affiliation'], $corp_name) !== false) {
     $arr = explode(",", $row['type_of_share']);
     $arr2 = explode("|", $row['shares_owned']);
-    $arr3 = explode(",", $row['company_affiliation']);
+    $arr3 = explode("|", $row['company_affiliation']);
 
     $position = "";
     $share = "";
@@ -280,7 +280,7 @@ function individual_fetch_data()
       $arr = explode(",", $row['ID']);
       $arr1 = explode(",", $row['type_of_share']);
       $arr2 = explode("|", $row['shares_owned']);
-      $arr3 = explode(",", $row['company_affiliation']);
+      $arr3 = explode("|", $row['company_affiliation']);
       $arr4 = explode("|", $share);
       $arr5 = explode(",", $typeofshare);
       $position = "";

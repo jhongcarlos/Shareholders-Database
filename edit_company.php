@@ -8,8 +8,7 @@ $comp_id = "";
 if ($row = sqlsrv_fetch_array($edit_stmt, SQLSRV_FETCH_ASSOC)) {
     $comp_id = $row['ID'];
 }
-if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] == "Administrator") { } 
-elseif ($_SESSION['mpic_mpic_role'] == "Site Admin" and $comp_id == $_SESSION['edit_id_comp']) { } else {
+if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] == "Administrator") { } elseif ($_SESSION['mpic_mpic_role'] == "Site Admin" and $comp_id == $_SESSION['edit_id_comp']) { } else {
     header('Location:index');
 }
 ?>
@@ -56,7 +55,7 @@ elseif ($_SESSION['mpic_mpic_role'] == "Site Admin" and $comp_id == $_SESSION['e
                         $stmt = sqlsrv_query($db, $sql);
                         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 
-                            $company_affiliation = explode(",", $row['company_affiliation']);
+                            $company_affiliation = explode("|", $row['company_affiliation']);
                             $director_officer = explode(",", $row['director_officer']);
                             $do_position = explode(",", $row['do_position']);
                             $shares_owned = explode("|", $row['shares_owned']);
@@ -85,6 +84,41 @@ elseif ($_SESSION['mpic_mpic_role'] == "Site Admin" and $comp_id == $_SESSION['e
                                 <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
                                     <label for="f_name">Total Number of Shares</label>
                                     <input type="text" name="total_shares" class="form-control" required value="<?= $row['total_shares'] ?>">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
+                                    <label for="f_name">Category</label>
+                                    <select name="category" class="form-control">
+                                        <?php
+                                            $cat = array("Power", "Water", "Rail", "Tollways", "Logistics", "Hospital", "Others");
+                                            foreach ($cat as $val) {
+                                                if ($val == $row['category']) {
+                                                    echo "<option selected>" . $row['category'] . "</option>";
+                                                } else {
+                                                    echo "<option>" . $val . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col md-12 col-xs-12 col-xl-12 col-sm-12">
+                                    <label for="f_name">Internal / External</label>
+                                    <select name="internal_external" class="form-control" required>
+                                        <?php
+                                            if ($row['internal_external'] == "Internal") { ?>
+                                            <option selected>Internal</option>
+                                            <option>External</option>
+                                        <?php
+                                            } else { ?>
+                                            <option>Internal</option>
+                                            <option selected>External</option>
+                                        <?php
+                                            }
+                                            ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -156,13 +190,20 @@ elseif ($_SESSION['mpic_mpic_role'] == "Site Admin" and $comp_id == $_SESSION['e
                                         <!-- <input type="text" name="type_of_shares[]" class="form-control" value="<?= $type_of_share[$i] ?>"> -->
                                         <select name="type_of_shares[]" class="form-control" required>
                                             <?php
-                                                    if ($type_of_share[$i] == "Common") { ?>
+                                                    if ($type_of_share[$i] == "Preferred") { ?>
+                                                <option></option>
+                                                <option>Common</option>
+                                                <option selected>Preferred</option>
+                                            <?php
+                                                    } elseif ($type_of_share[$i] == "Common") { ?>
+                                                <option></option>
                                                 <option selected>Common</option>
                                                 <option>Preferred</option>
                                             <?php
                                                     } else { ?>
+                                                <option></option>
                                                 <option>Common</option>
-                                                <option selected>Preferred</option>
+                                                <option>Preferred</option>
                                             <?php
                                                     }
                                                     ?>

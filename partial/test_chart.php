@@ -39,6 +39,20 @@ include('../server.php');
                 tags: {
                     "Category": {
                         template: "ula"
+                    },
+                    "Category1": {
+                        template: "polina"
+                    }
+                },
+                ';
+            } elseif (empty($_GET['type'])) {
+                echo '
+                tags: {
+                    "Category": {
+                        template: "ula"
+                    },
+                    "Category1": {
+                        template: "polina"
                     }
                 },
                 ';
@@ -51,6 +65,9 @@ include('../server.php');
             tags: {
                 "Category": {
                     template: "ana"
+                },
+                "Category1": {
+                    template: "polina"
                 }
             },
             orientation: OrgChart.orientation.left,';
@@ -59,6 +76,9 @@ include('../server.php');
             tags: {
                 "Category": {
                     template: "ula"
+                },
+                "Category1": {
+                    template: "polina"
                 }
             },';
                 }
@@ -70,24 +90,34 @@ include('../server.php');
                 $sql = "";
                 $stmt = "";
                 if (empty($_GET)) {
-                    $sql = "SELECT * FROM dbo.tbl_company";
+                    $sql = "SELECT * FROM dbo.tbl_company 
+                    WHERE is_deleted LIKE '0'
+                    OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
+                    $stmt = sqlsrv_query($db, $sql);
+                } elseif (empty($_GET['type'])) {
+                    $sql = "SELECT * FROM dbo.tbl_company 
+                    WHERE CONVERT(NVARCHAR(MAX), internal_external) = N'Internal'
+                    AND is_deleted LIKE '0'
+                    OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
                     $stmt = sqlsrv_query($db, $sql);
                 } else {
                     $cat = $_GET['cat'];
                     $sql = "SELECT * FROM dbo.tbl_company 
-                    WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' OR 
-                    CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
+                    WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' 
+                    AND is_deleted LIKE '0'
+                    OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
                     $stmt = sqlsrv_query($db, $sql);
                 }
                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                    $arr = explode(",", $row['company_affiliation']);
+                    $arr = explode("|", $row['company_affiliation']);
                     foreach ($arr as $k => $v) {
                         if ($v == "") {
                             $v = 0;
                         } else {
                             // Loop starts here
                             $sql2 = "SELECT * FROM dbo.tbl_company 
-                            WHERE CONVERT(NVARCHAR(MAX), company_name) = N'$v'";
+                            WHERE CONVERT(NVARCHAR(MAX), company_name) = N'$v'
+                            AND is_deleted LIKE '0'";
                             $stmt2 = sqlsrv_query($db, $sql2);
                             if ($r = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) { ?> {
                                     from: <?= $row['ID'] ?>,
@@ -137,17 +167,26 @@ include('../server.php');
                 $sql = "";
                 $stmt = "";
                 if (empty($_GET)) {
-                    $sql = "SELECT * FROM dbo.tbl_company";
+                    $sql = "SELECT * FROM dbo.tbl_company WHERE is_deleted LIKE '0'";
                     $stmt = sqlsrv_query($db, $sql);
                 } else {
                     $cat = $_GET['cat'];
-                    $type = $_GET['type'];
-                    $sql = "SELECT * FROM dbo.tbl_company 
-                    WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' 
-                    AND is_deleted LIKE '0' 
-                    AND CONVERT(NVARCHAR(MAX), internal_external) = N'$type'
-                    OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
-                    $stmt = sqlsrv_query($db, $sql);
+                    $type = "";
+                    if (!empty($_GET['type'])) {
+                        $type = $_GET['type'];
+                        $sql = "SELECT * FROM dbo.tbl_company 
+                        WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' 
+                        AND is_deleted LIKE '0' 
+                        AND CONVERT(NVARCHAR(MAX), internal_external) = N'$type'
+                        OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
+                        $stmt = sqlsrv_query($db, $sql);
+                    } else {
+                        $sql = "SELECT * FROM dbo.tbl_company 
+                        WHERE CONVERT(NVARCHAR(MAX), category) = N'$cat' 
+                        AND is_deleted LIKE '0'
+                        OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
+                        $stmt = sqlsrv_query($db, $sql);
+                    }
                 }
                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                     $par_id = "";
@@ -159,6 +198,11 @@ include('../server.php');
                     ?> {
                         id: <?= $row['ID'] ?>,
                         pid: <?= $row['parent_id'] ?>,
+                        <?php
+                            if($row['internal_external'] == "External"){
+                                echo 'tags: ["Category1"],';
+                            }
+                        ?>
                         name: '<?= $row['company_name'] ?>',
                         TotalShare: '<?= $row['total_shares'] ?>',
                         Address: '<?= $row['address'] ?>',

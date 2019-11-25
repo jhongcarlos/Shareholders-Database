@@ -49,35 +49,25 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                 </div>
                 <div class="form-group">
                     <label for="role">Role</label>
-                    <select name="role" class="form-control">
+                    <select name="role" class="form-control" id="role">
                         <option>Administrator</option>
                         <option>Site Admin</option>
                         <option>Viewer</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <!-- <label for="will_handle">Will handle:</label>
-                    <select name="will_handle" class="form-control"> -->
-                        <?php
-                        // $sql = "SELECT * FROM dbo.tbl_company";
-                        // $stmt = sqlsrv_query($db, $sql);
-
-                        // while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) { ?>
-                            <!-- <option><?= $row['company_name'] ?></option> -->
-                        <?php // } ?>
-                    <!-- </select> -->
+                <div class="form-group" id="whandle" style="display:none">
                     <label for="will_handle">Will handle:</label>
                     <input placeholder='Company Name' class='form-control' list='comp_list_result' name='will_handle' id='comp_list'>
                     <datalist id='comp_list_result'>
-                    <?php
-                    echo "'";
-                    $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
-                    $stmt2 = sqlsrv_query($db, $sql2);
-                    while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
-                        echo "<option>" . $row['company_name'] . "</option>";
-                    }
-                    echo "'";
-                    ?>
+                        <?php
+                        echo "'";
+                        $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
+                        $stmt2 = sqlsrv_query($db, $sql2);
+                        while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                            echo "<option>" . $row['company_name'] . "</option>";
+                        }
+                        echo "'";
+                        ?>
                     </datalist>
                 </div>
                 <div class="form-group">
@@ -89,8 +79,20 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
         </div>
     </div>
     <?php
-        // include('partial/index_footer.php');
+    include('partial/index_footer.php');
     ?>
+    <script>
+        $(document).ready(function() {
+            $("#role").change(function() {
+                if ($(this).find("option:selected").val() == "Site Admin") {
+                    $("#whandle").show();
+                }
+                else{
+                    $("#whandle").hide();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -98,6 +98,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
             </div>
         </div>
     </div>
+    <?php include('partial/index_footer.php'); ?>
     <script>
         var datepickerfrom = new ej.calendars.DatePicker({ width: "255px" });
         datepickerfrom.appendTo('#from');
@@ -127,7 +128,6 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
             $('#tbl_audit_trail').DataTable({});
         });
     </script>
-    <?php include('partial/index_footer.php'); ?>
 </body>
 
 </html>

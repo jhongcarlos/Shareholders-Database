@@ -61,7 +61,7 @@ if (empty($_POST['aff_comp'])) {
         }
     }
     foreach ($aff_comp as $key => $value) {
-        if ($aff_comp_h) $aff_comp_h .= ',';
+        if ($aff_comp_h) $aff_comp_h .= '|';
         $aff_comp_h .= $value;
     }
     foreach ($held_position as $key => $value) {
