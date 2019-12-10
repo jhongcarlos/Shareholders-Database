@@ -39,26 +39,37 @@ $db = sqlsrv_connect('MPIC-BACKUP-02', $conn_info);
 
 if (isset($_POST['btn_login'])) {
     $error_message = "";
+    $val_until = "";
     $email = $_POST['email'];
     $password = md5($_POST['password']);
 
-    $sql = "SELECT * FROM dbo.users_login WHERE email LIKE '$email' AND password LIKE '$password' AND is_deleted LIKE '0'";
+    $sql = "SELECT * FROM dbo.users_login 
+    WHERE email LIKE '$email' 
+    AND password LIKE '$password' 
+    AND is_deleted LIKE '0'";
     $stmt = sqlsrv_query($db, $sql, array(), array("Scrollable" => "static"));
 
     if (sqlsrv_num_rows($stmt) == 1) {
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
             $_SESSION['mpic_mpic_name'] = $row['first_name'] . ' ' . $row['last_name'];
             $_SESSION['mpic_mpic_role'] = $row['role'];
-            $_SESSION['mpic_mpic_id'] = $row['ID'];
+            $_SESSION['mpic_mpic_id'] = $row['id'];
             $_SESSION['mpic_mpic_company'] = $row['will_handle'];
+            $val_until = $row['valid_until'];
         }
-        $user_name = $_SESSION['mpic_mpic_name'];
-        $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Logged in','$datetime')");
-        header("Location: index");
+
+        if ($val_until < $datetime or $val_until == "") {
+            $error_message = "Account has expired";
+        } else {
+            $user_name = $_SESSION['mpic_mpic_name'];
+            $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Logged in','$datetime')");
+            header("Location: index");
+        }
     } else {
         $error_message = "Invalid email or password";
     }
 }
+
 if (isset($_POST['test_submit'])) {
     foreach ($_POST['test'] as $key => $value) {
         echo "<script>alert('" . $value . "')</script>";
@@ -70,6 +81,7 @@ if (isset($_POST['sh_submit'])) {
     $first_name = $_POST['first_name'];
     $last_name = $_POST['last_name'];
     $middle_name = $_POST['middle_name'];
+    $full_name = $first_name . ' ' . $last_name;
 
     if (empty($_POST['aff_comp'])) {
         $sql = "INSERT INTO dbo.tbl_shareholder(first_name,
@@ -116,15 +128,30 @@ if (isset($_POST['sh_submit'])) {
             $target = "images/" . basename($value);
             if ($stocks_cert_h) $stocks_cert_h .= ',';
             $stocks_cert_h .= $value;
-            foreach ($stock_cert_tmp as $k => $v) {
-                if (move_uploaded_file($v, $target)) {
-                    $msg = "Success";
-                }
+        }
+        // foreach ($stock_cert_tmp as $k => $v) {
+        //     if (move_uploaded_file($v, $target)) {
+        //         $msg = "Success";
+        //     }
+        // }
+        $i = 0;
+        while ($i < count($stock_cert)) {
+            if (move_uploaded_file($stock_cert_tmp[$i], "images/" . $stock_cert[$i])) {
+                $i++;
             }
         }
         foreach ($aff_comp as $key => $value) {
             if ($aff_comp_h) $aff_comp_h .= '|';
             $aff_comp_h .= $value;
+
+            $attachments = explode(",", $stocks_cert_h);
+            $i_sql = "INSERT INTO dbo.tbl_comp_attachments 
+            VALUES('$attachments[$key]',
+            'Uploaded upon creation',
+            '$value',
+            '$full_name',
+            '$datetime')";
+            $i_stmt = sqlsrv_query($db, $i_sql);
         }
         foreach ($held_position as $key => $value) {
             if ($held_position_h) $held_position_h .= ',';
@@ -164,7 +191,7 @@ if (isset($_POST['sh_submit'])) {
             '$held_position_h',
             '$shares_owned_h',
             '$type_of_shares_h',
-            '$stocks_cert_h',
+            -- '$stocks_cert_h',
             '$remarks_h',
             '$datetime',
             '0')";
@@ -206,8 +233,11 @@ if (isset($_POST['corp_submit'])) {
             ";
             $user_name = $_SESSION['mpic_mpic_name'];
             $stmt1 = sqlsrv_query($db, "INSERT INTO dbo.tbl_audit_trail VALUES('$user_name','Added Coporation - $c_name','$datetime')");
+        } else {
+            die(print_r(sqlsrv_errors(), true));
         }
     } else {
+
 
         $dir_off = $_POST['dir_off'];
         $do_position = $_POST['do_position'];
@@ -237,10 +267,16 @@ if (isset($_POST['corp_submit'])) {
             $target = "images/" . basename($value);
             if ($stocks_cert_h) $stocks_cert_h .= ',';
             $stocks_cert_h .= $value;
-            foreach ($stock_cert_tmp as $k => $v) {
-                if (move_uploaded_file($v, $target)) {
-                    $msg = "Success";
-                }
+        }
+        // foreach ($stock_cert_tmp as $k => $v) {
+        //     if (move_uploaded_file($v, $target)) {
+        //         $msg = "Success";
+        //     }
+        // }
+        $i = 0;
+        while ($i < count($stock_cert)) {
+            if (move_uploaded_file($stock_cert_tmp[$i], "images/" . $stock_cert[$i])) {
+                $i++;
             }
         }
         foreach ($dir_off as $key => $value) {
@@ -258,6 +294,15 @@ if (isset($_POST['corp_submit'])) {
         foreach ($aff_comp as $key => $value) {
             if ($aff_com_h) $aff_com_h .= '|';
             $aff_com_h .= $value;
+
+            $attachments = explode(",", $stocks_cert_h);
+            $c_sql = "INSERT INTO dbo.tbl_comp_attachments 
+            VALUES('$attachments[$key]',
+            'Uploaded upon creation',
+            '$value',
+            '$c_name',
+            '$datetime')";
+            $c_stmt = sqlsrv_query($db, $c_sql);
         }
         foreach ($type_of_shares as $key => $value) {
             if ($type_of_shares_h) $type_of_shares_h .= ',';
@@ -292,7 +337,7 @@ if (isset($_POST['corp_submit'])) {
                 '$shares_owned_h',
                 '$type_of_shares_h',
                 '$int_ext_h',
-                '$stocks_cert_h',
+                -- '$stocks_cert_h',
                 '$remarks_h',
                 '$datetime',
                 '1',
@@ -528,6 +573,10 @@ if (isset($_POST['btn_register'])) {
     }
     $password = md5($_POST['password']);
 
+    $duration = $_POST['duration']; // get the date from user
+    $date = date_create($duration); // convert as date
+    $duration1 = date_format($date, "m/d/Y"); // format
+
     $sql = "SELECT * FROM dbo.users_login WHERE CONVERT(NVARCHAR(MAX), email) = '$email'";
     $stmt = sqlsrv_query($db, $sql);
 
@@ -553,7 +602,8 @@ if (isset($_POST['btn_register'])) {
             '$password',
             '$will_handle',
             '$datetime',
-            '0')";
+            '0',
+            '$duration1')";
 
         $stmt1 = sqlsrv_query($db, $sql1);
         if ($stmt1) {
@@ -656,10 +706,16 @@ if (isset($_POST['comp_submit'])) {
             $target = "images/" . basename($value);
             if ($stocks_cert_h) $stocks_cert_h .= ',';
             $stocks_cert_h .= $value;
-            foreach ($stock_cert_tmp as $k => $v) {
-                if (move_uploaded_file($v, $target)) {
-                    $msg = "Success";
-                }
+        }
+        // foreach ($stock_cert_tmp as $k => $v) {
+        //     if (move_uploaded_file($v, $target)) {
+        //         $msg = "Success";
+        //     }
+        // }
+        $i = 0;
+        while ($i < count($stock_cert)) {
+            if (move_uploaded_file($stock_cert_tmp[$i], "images/" . $stock_cert[$i])) {
+                $i++;
             }
         }
         foreach ($dir_off as $key => $value) {
@@ -673,6 +729,21 @@ if (isset($_POST['comp_submit'])) {
         foreach ($aff_comp as $key => $value) {
             if ($aff_com_h) $aff_com_h .= '|';
             $aff_com_h .= $value;
+
+            $attachments = explode(",", $stocks_cert_h);
+            $sql = "INSERT INTO dbo.tbl_comp_attachments 
+            VALUES('$attachments[$key]',
+            'Uploaded upon creation',
+            '$value',
+            '$c_name',
+            '$datetime')";
+
+            $stmt = sqlsrv_query($db, $sql);
+            // if ($stmt) {
+            //     echo "ok";
+            // } else {
+            //     die(print_r(sqlsrv_errors(), true));
+            // }
         }
         foreach ($type_of_shares as $key => $value) {
             if ($type_of_shares_h) $type_of_shares_h .= ',';
@@ -709,7 +780,7 @@ if (isset($_POST['comp_submit'])) {
                 '$shares_owned_h',
                 '$type_of_shares_h',
                 '$int_ext',
-                '$stocks_cert_h',
+                -- '$stocks_cert_h',
                 '$remarks_h',
                 '$datetime',
                 '$parent_id',
@@ -957,6 +1028,143 @@ if (isset($_POST["corp_id"])) {
                     echo '<img src="images/' . $va . '" class="img-responsive">';
                 }
             }
+        }
+    }
+}
+$attachment_res = "";
+if (isset($_POST['btn_upload_attachment'])) {
+
+    $attachment = $_FILES['attachment']['name'];
+    $attachment_tmp = $_FILES['attachment']['tmp_name'];
+    $remarks = $_POST['remarks'];
+    $root_comp = $_POST['root_company'];
+    $company_name = $_POST['company_name'];
+    $remarks_h = "";
+
+    foreach ($remarks as $key => $value) {
+        if ($remarks_h) $remarks_h .= ',';
+        $remarks_h .= $value;
+    }
+
+    foreach ($attachment as $key => $value) {
+        $target = "images/" . basename($value);
+        $rem = explode(',', $remarks_h);
+
+        $sql = "INSERT INTO dbo.tbl_comp_attachments 
+        VALUES('$value',
+        '$rem[$key]',
+        '$company_name',
+        '$root_comp',
+        '$datetime')";
+
+        $stmt = sqlsrv_query($db, $sql);
+    }
+    // foreach ($attachment_tmp as $k => $v) {
+    //     if (move_uploaded_file($v, $target)) {
+    //         $attachment_res = "
+    //         <div class='alert alert-success'>
+    //             $count Attachment(s) has been uploaded to $company_name
+    //         </div>
+    //          ";
+    //     }
+    //     $count += 1;
+    // }
+    $count = 1;
+    $i = 0;
+    while ($i < count($attachment)) {
+        if (move_uploaded_file($attachment_tmp[$i], "images/" . $attachment[$i])) {
+            $i++;
+            $attachment_res = "
+                <div class='alert alert-success'>
+                    $count Attachment(s) has been uploaded to $company_name
+                </div>
+                ";
+            $count += 1;
+        }
+    }
+}
+if (isset($_POST['btn_logout'])) {
+    session_destroy();
+    header("Location: login");
+}
+// Show director / officer company
+if (isset($_POST["comp_id"])) {
+    $comp_id = $_POST['comp_id'];
+    $comp_nam = $_POST['comp_nam'];
+
+    $sql = "SELECT * FROM dbo.tbl_company WHERE ID LIKE '$comp_id'";
+    $stmt = sqlsrv_query($db, $sql);
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+
+        $diroff =  explode(",", $row['director_officer']);
+        $held_position = explode(",", $row['do_position']);
+
+        foreach ($diroff as $key => $value) {
+            echo "<p>" . $value . " - " . $held_position[$key] . "</p>";
+        }
+    }
+}
+// View attachment of shareholder from company
+if (isset($_POST["comp_name"])) {
+    $comp_name = $_POST['comp_name'];
+    $root_comp = $_POST['root_comp'];
+
+    $sql = "SELECT * FROM dbo.tbl_comp_attachments 
+    WHERE company_name LIKE '$comp_name' 
+    AND root_company LIKE '$root_comp'";
+    $stmt = sqlsrv_query($db, $sql);
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+
+        echo "<center><img src='images/" . $row['attachment_name'] . "' class='img-responsive'>";
+        echo "<label>Remarks:" . $row['remarks'] . "<br>" . $row['upload_date'] . "</label></center><hr>";
+    }
+}
+// View attachment of corporation from company
+if (isset($_POST["ind_comp_name"])) {
+    $ind_comp_name = $_POST['ind_comp_name'];
+    $root_corp = $_POST['root_corp'];
+
+    $sql = "SELECT * FROM dbo.tbl_comp_attachments 
+    WHERE company_name LIKE '$ind_comp_name' 
+    AND root_company LIKE '$root_corp'";
+    $stmt = sqlsrv_query($db, $sql);
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+
+        echo "<center><img src='images/" . $row['attachment_name'] . "' class='img-responsive'>";
+        echo "<label>Remarks:" . $row['remarks'] . "<br>" . $row['upload_date'] . "</label></center><hr>";
+    }
+}
+// View attachment of company from corporation
+if (isset($_POST["corp_corp_name"])) {
+    $corp_corp_name = $_POST['corp_corp_name'];
+    $corp_root_comp = $_POST['corp_root_comp'];
+
+    $sql = "SELECT * FROM dbo.tbl_comp_attachments 
+    WHERE company_name LIKE '$corp_corp_name' 
+    AND root_company LIKE '$corp_root_comp'";
+    $stmt = sqlsrv_query($db, $sql);
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+
+        echo "<center><img src='images/" . $row['attachment_name'] . "' class='img-responsive'>";
+        echo "<label>Remarks:" . $row['remarks'] . "<br>" . $row['upload_date'] . "</label></center><hr>";
+    }
+}
+if (isset($_POST["corp_id_corp"])) {
+    $corp_id_corp = $_POST['corp_id_corp'];
+    $comp_nam = $_POST['comp_nam'];
+
+    $sql = "SELECT * FROM dbo.tbl_corporation WHERE ID LIKE '$corp_id_corp'";
+    $stmt = sqlsrv_query($db, $sql);
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+
+        $diroff =  explode(",", $row['director_officer']);
+        $held_position = explode(",", $row['do_position']);
+
+        foreach ($diroff as $key => $value) {
+            echo "<p>" . $value . " - " . $held_position[$key] . "</p>";
         }
     }
 }

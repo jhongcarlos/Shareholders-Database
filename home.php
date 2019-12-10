@@ -21,6 +21,8 @@
 
         .jumbotron {
             background-image: url("images/home-bg.png");
+            background-repeat: no-repeat;
+            background-size: cover;
         }
 
         .fa:hover {
@@ -30,11 +32,32 @@
         .primarycolor {
             color: #456;
         }
+
+        .mini-footer {
+            background: #192027;
+            text-align: center;
+            padding: 32px 0
+        }
+
+        .mini-footer p {
+            margin: 0;
+            line-height: 26px;
+            font-size: 15px;
+            color: #999
+        }
+
+        .mini-footer p a {
+            color: #5867dd
+        }
+
+        .mini-footer p a:hover {
+            color: #34bfa3
+        }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <!-- <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
 
@@ -43,22 +66,22 @@
                 </div>
                 <h1 class="brand brand-name navbar-left">
                     <div class="navbar-left">
-                        <img src="images/MPIC_logo.png" alt="">
+                        
                 </h1>
             </div>
-            <!-- <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+            <div class="collapse navbar-collapse navbar-right" id="myNavbar">
             <ul class="nav navbar-nav">
                 <li><a href="#intro">Home</a></li>
    				<li><a href="#about">About</a></li>
    				<li><a href="#portfolio">Menu</a></li>
     			<li><a href="#contact">Reserve</a></li>
             </ul>
-        </div> -->
         </div>
-    </nav>
+        </div>
+    </nav> -->
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h2 class="display-4 text-center text-white">OUR COMPANY</h2>
+            <h1 class="display-4 text-center text-white"><img style="background:#fff;height:150px;width:270px ;padding:30px 30px 30px 30px" src="images/MPIC_logo.png" alt=""></h1>
         </div>
     </div>
     <div class="container">
@@ -73,7 +96,7 @@
                                 <b>Power</b>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <a href="#" style="float:right;color:#fff"><i class="fa fa-eye"></i></a>
+                                <a href="partial/test_chart?cat=Power" style="float:right;color:#fff"><i class="fa fa-eye"></i></a>
                             </div>
                         </div>
                     </div>
@@ -88,7 +111,7 @@
                                 <b>Water</b>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <a href="#" style="float:right;color:#fff"><i class="fa fa-eye"></i></a>
+                                <a href="partial/test_chart?cat=Water" style="float:right;color:#fff"><i class="fa fa-eye"></i></a>
                             </div>
                         </div>
                     </div>
@@ -104,7 +127,7 @@
                                 <b>Rail</b>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <a href="#" style="float:right;color:#fff"><i class="fa fa-eye"></i></a>
+                                <a href="partial/test_chart?cat=Rail" target="blank" style="float:right;color:#fff"><i class="fa fa-eye"></i></a>
                             </div>
                         </div>
                     </div>
@@ -151,7 +174,7 @@
                                 <b>Hospital</b>
                             </div>
                             <div class="col-md-3 col-sm-4">
-                                <a href="#" style="float:right;color:#fff"><i class="fa fa-eye"></i></a>
+                                <a href="partial/test_chart?cat=Hospital" style="float:right;color:#fff"><i class="fa fa-eye"></i></a>
                             </div>
                         </div>
                     </div>
@@ -165,7 +188,7 @@
                                 <br><b>Others</b>
                             </div>
                             <div class="col-md-4 col-sm-4">
-                                <a href="#" style="float:right;color:#fff"><i class="fa fa-eye"></i></a>
+                                <a href="partial/test_chart?cat=Others" style="float:right;color:#fff"><i class="fa fa-eye"></i></a>
                             </div>
                         </div>
                     </div>
@@ -173,15 +196,33 @@
             </div>
             <!-- <div class="col-md-3"></div> -->
         </div><br><br>
-        <h3 class="text-center primarycolor">Lorem Ipsum</h3><br>
-        <p class="primarycolor">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent semper, dolor a vestibulum vulputate, nibh nibh ullamcorper nulla, id malesuada enim nisi vitae elit. Cras vehicula ac eros in tempus. Morbi a aliquet elit, sed gravida ex. Suspendisse non eleifend dolor, sit amet lacinia massa. Curabitur non leo quam. Integer varius, quam ac luctus egestas, arcu sem pharetra augue, nec viverra justo risus a ante. Pellentesque accumsan lacus sed libero eleifend ultricies.
-            <br><br>
-            Sed et nibh orci. Donec eget ipsum pellentesque, tincidunt ex at, cursus justo. In euismod dignissim est ac pellentesque. Aliquam commodo est sed condimentum tristique. Vestibulum est metus, finibus a ligula et, feugiat lobortis lacus. Cras commodo mi et odio dictum, at tincidunt leo finibus. Quisque volutpat semper eros, nec viverra ipsum condimentum non. Sed vestibulum et justo sit amet auctor. Sed efficitur nisl id lorem ultrices lobortis. In volutpat lorem vel elementum egestas. Pellentesque tristique interdum justo, nec tempus lorem vulputate eget. In hac habitasse platea dictumst.
-            <br><br>
-            Cras accumsan fringilla hendrerit. Praesent facilisis turpis id aliquet porta. Proin sed tempus quam. Quisque commodo egestas feugiat. Vivamus vulputate felis vel nisi faucibus tempus. Aliquam at massa elementum, tristique lectus vitae, laoreet enim. Fusce ut nibh eros. Aliquam erat volutpat.
+        <h3 class="text-center primarycolor">Metro Pacific Investments Corporation (‘MPIC’)</h3><br>
+        <p class="primarycolor">
+            Metro Pacific Investments Corporation (‘MPIC’) is a Philippine-based, publicly listed investment management and holding company registered with the Philippine Securities Exchange Commission. We are a leading infrastructure holding company with a diverse set of assets held through our operating companies. Through acquisitions and strategic partnerships, we seek to create value by upgrading infrastructure, improving operational efficiency, increasing customer coverage and working closely with regulators and other partners in government.<br><br>
+            The overarching objective of our investment and management strategy is to create value for our stakeholders by achieving long-term economic success while contributing to inclusive and sustainable development of our nation. We operate in a number of highly-regulated sectors within a framework of national laws and regulations including various concession and franchise agreements. We work hard to uphold our commitments under these agreements, and we are proud of our legacy over the past years of delivering on our promises to rehabilitate, maintain, strengthen and improve vital services that help to form the backbone of the Philippine economy and society.<br><br>
+            Through our operating companies, we strive to deliver high quality and affordable services for customers, provide safe workplaces and merit-based opportunities for employees and generate reasonable returns for business partners and investors. On a daily basis our operating companies are making a difference to the lives of millions of Filipinos, powering commerce and households, connecting people and places, delivering clean and safe water, and making world-class standards of healthcare available to all.<br><br>
+        </p>
     </div>
+    <div class="mini-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="copyright-text">
+                            <p>© 2019
+                                <a href="#">Metro Pacific Investments Corporation</a>. All rights reserved. Created by
+                                <a href="#">Metro Pacific Investments Corporation</a>
+                            </p>
+                        </div>
+
+                        <div class="go_top">
+                            <span class="icon-arrow-up"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     <script src="js/home.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.3/lib/darkmode-js.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.3/lib/darkmode-js.min.js"></script>
     <script>
         var options = {
             bottom: '32px', // default: '32px'
@@ -199,7 +240,7 @@
 
         const darkmode = new Darkmode(options);
         darkmode.showWidget();
-    </script>
+    </script> -->
 </body>
 
 </html>

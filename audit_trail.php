@@ -87,11 +87,11 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                 <div class="modal-body">
                     <form action="pdf" method="post" target="blank">
                         <label for="from">From</label>
-                            <input type="text" id="from" name="startDate" class="form-control">
+                        <input type="text" id="from" name="startDate" class="form-control">
 
                         <label for="to">To</label>
-                            <input type="text" id="to" name="endDate" class="form-control">
-                            <br><br>
+                        <input type="text" id="to" name="endDate" class="form-control">
+                        <br><br>
                         <button class="btn btn-primary" name="at_pdf">Generate PDF</button>
                     </form>
                 </div>
@@ -100,9 +100,13 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
     </div>
     <?php include('partial/index_footer.php'); ?>
     <script>
-        var datepickerfrom = new ej.calendars.DatePicker({ width: "255px" });
+        var datepickerfrom = new ej.calendars.DatePicker({
+            width: "255px"
+        });
         datepickerfrom.appendTo('#from');
-        var datepickerto = new ej.calendars.DatePicker({ width: "255px" });
+        var datepickerto = new ej.calendars.DatePicker({
+            width: "255px"
+        });
         datepickerto.appendTo('#to');
 
         $(document).ready(function() {

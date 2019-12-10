@@ -14,6 +14,8 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
     <link rel="stylesheet" href="css/style.css">
     <?php include('partial/header.php'); ?>
     <title>Register - Metro Pacific Investments Corporation</title>
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+    <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet">
 </head>
 
 <body style="background:#456">
@@ -57,24 +59,26 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                 </div>
                 <div class="form-group" id="whandle" style="display:none">
                     <label for="will_handle">Will handle:</label>
-                    <input placeholder='Company Name' class='form-control' list='comp_list_result' name='will_handle' id='comp_list'>
+                    <input placeholder='Category Name' class='form-control' list='comp_list_result' name='will_handle' id='comp_list'>
                     <datalist id='comp_list_result'>
-                        <?php
-                        echo "'";
-                        $sql2 = "SELECT * FROM dbo.tbl_company WHERE CONVERT(NVARCHAR(MAX), is_deleted) = N'0' ORDER BY CONVERT(NVARCHAR(MAX), company_name) ASC";
-                        $stmt2 = sqlsrv_query($db, $sql2);
-                        while ($row = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
-                            echo "<option>" . $row['company_name'] . "</option>";
-                        }
-                        echo "'";
-                        ?>
+                        <option>Power</option>
+                        <option>Water</option>
+                        <option>Rail</option>
+                        <option>Logistics</option>
+                        <option>Tollways</option>
+                        <option>Hospital</option>
+                        <option>Others</option>
                     </datalist>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" name="password" class="form-control">
                 </div>
-                <button class="login" name="btn_register">Login</button>
+                <div class="form-group">
+                    <label for="duration">Valid until:</label>
+                    <input type="text" id="duration" name="duration" class="form-control">
+                </div>
+                <button class="login" name="btn_register">Register</button>
             </form>
         </div>
     </div>
@@ -82,12 +86,34 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
     include('partial/index_footer.php');
     ?>
     <script>
+        var duration = new ej.calendars.DatePicker({
+            width: "100%"
+        });
+        duration.appendTo('#duration');
         $(document).ready(function() {
+            if ($('html').hasClass('no-touch')) {
+                var $input, $btn;
+                $(".date-wrapper").each(function(index) {
+                    $input = $(this).find('input');
+                    $btn = $(this).find('.glyphicon');
+                    $input.attr('type', 'text');
+                    var pickerStart = new Pikaday({
+                        field: $input[0],
+                        trigger: $btn[0],
+                        container: $(this)[0],
+                        format: 'DD/MM/YYYY',
+                        firstDay: 1
+                    });
+                    $btn.show();
+                });
+            } else {
+                $('.date-wrapper input').attr('type', 'date');
+                $('.calendar-btn').hide();
+            }
             $("#role").change(function() {
                 if ($(this).find("option:selected").val() == "Site Admin") {
                     $("#whandle").show();
-                }
-                else{
+                } else {
                     $("#whandle").hide();
                 }
             });

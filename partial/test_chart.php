@@ -15,64 +15,68 @@ include('../server.php');
     <title><?php if (!empty($_GET['cat'])) {
                 echo $_GET['cat'] . ' - ';
             } ?>Graphical Report</title>
+    <style id="myStyles">
+        [link-id] path {
+            stroke: #FFF;
+            display: none;
+        }
+
+        .field_1 {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-transform: uppercase;
+            fill: #fff;
+            word-wrap: break-word;
+        }
+
+        .field_0 {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-transform: uppercase;
+            fill: #000;
+        }
+
+        text {
+            font-weight: bold;
+        }
+
+        rect {
+            fill: gray;
+        }
+
+        [node-id='1029'] rect {
+            fill: #456;
+        }
+
+        [node-id='-1'] rect {
+            fill: #fff;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div id="people" style="height:100%;width:100%"></div>
+    <div id="companies" style="height:100%;width:100%"></div>
     <script>
         $(document).ready(function(e) {
             OrgChart.slinkTemplates.affiliations = Object.assign({}, OrgChart.slinkTemplates.orange);
-            OrgChart.slinkTemplates.affiliations.link = '<path  marker-start="url(#arrowSlinkOrange)" marker-end="url(#dotSlinkOrange)" stroke-linejoin="round" stroke="#000" stroke-width="2" fill="none" d="{d}" />';
+            OrgChart.slinkTemplates.affiliations.link = '<path  marker-start="url(#dotSlinkOrange)" marker-end="url(#arrowSlinkOrange)" stroke-linejoin="round" stroke="#000" stroke-width="1" fill="none" d="{d}" />';
+            OrgChart.templates.ana.field_0 = '<text class="field_0"  style="font-size: 20px;" fill="#ffffff" x="125" y="30" text-anchor="middle">{val}</text>';
+            OrgChart.templates.ana.field_1 = '<text class="field_1" style="font-size: 12px;" fill="#ffffff" x="125" y="50" text-anchor="middle">{val}</text>';
+            OrgChart.templates.ana.html = '<foreignobject class="node" style="font-size: 19px;color:#fff;text-align:center;font-family: Verdana, Geneva, Tahoma, sans-serif;text-transform: uppercase;" x="25" y="25" width="200" height="100" text-anchor="middle">{val}</foreignobject>';
+            OrgChart.slinkTemplates.affiliations.labelPosition = 'start';
             setInterval(function() {
                 $('a[title="GetOrgChart jquery plugin"]').hide();
                 // $('.get-btn').hide();
             }, 1);
-
         });
-        var chart = new OrgChart(document.getElementById("people"), {
+        OrgChart.CLINK_CURVE = 0.5;
+        var chart = new OrgChart(document.getElementById("companies"), {
             // mouseScrool: OrgChart.action.none,
             // template: "ula",
-            <?php
-            if (empty($_GET)) {
-                echo '
-                tags: {
-                    "Category": {
-                        template: "ula"
-                    },
-                    "Category1": {
-                        template: "polina"
-                    }
-                },
-                ';
-            } elseif (empty($_GET['type'])) {
-                echo '
-                tags: {
-                    "Category": {
-                        template: "ula"
-                    },
-                    "Category1": {
-                        template: "polina"
-                    }
-                },
-                ';
-            } else {
+            orientation: OrgChart.orientation.left,
+            // levelSeparation: 50,
+            // layout: OrgChart.treeLeftOffset,
+            // enableSearch: false,
 
-                if ($_GET['type'] == "External") {
-                    // ====
-                    echo ' 
-            template: "ula",
-            tags: {
-                "Category": {
-                    template: "ana"
-                },
-                "Category1": {
-                    template: "polina"
-                }
-            },
-            orientation: OrgChart.orientation.left,';
-                } elseif ($_GET['type'] == "Internal") {
-                    echo ' 
             tags: {
                 "Category": {
                     template: "ula"
@@ -80,11 +84,7 @@ include('../server.php');
                 "Category1": {
                     template: "polina"
                 }
-            },';
-                }
-            }
-            // ====
-            ?>
+            },
             slinks: [
                 <?php
                 $sql = "";
@@ -108,8 +108,10 @@ include('../server.php');
                     OR CONVERT(NVARCHAR(MAX), company_name) = N'METRO PACIFIC INVESTMENTS CORPORATION'";
                     $stmt = sqlsrv_query($db, $sql);
                 }
+                $ttest = 0;
                 while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                     $arr = explode("|", $row['company_affiliation']);
+                    $shares_owned = explode("|", $row['shares_owned']);
                     foreach ($arr as $k => $v) {
                         if ($v == "") {
                             $v = 0;
@@ -119,14 +121,21 @@ include('../server.php');
                             WHERE CONVERT(NVARCHAR(MAX), company_name) = N'$v'
                             AND is_deleted LIKE '0'";
                             $stmt2 = sqlsrv_query($db, $sql2);
-                            if ($r = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) { ?> {
+                            if ($r = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
+                                $total_shares = $r['total_shares'];
+                                ?> {
                                     from: <?= $row['ID'] ?>,
                                     to: <?= $r['ID'] ?>,
                                     template: 'affiliations',
-                                    label: '<?= "from:" . $row['ID'] . "to:" . $r['ID'] ?>',
+                                    // template: 'affiliations',
+                                    label: '<?php
+                                                            $num1 = str_replace(',', '', $total_shares);
+                                                            $num2 = str_replace(',', '', $shares_owned[$k]);
+                                                            $percent = (int) $num2 / (int) $num1;
+                                                            echo $percent_f = number_format($percent * 100, 2) . '%';
+                                                            ?>',
                                 },
                 <?php
-
                             }
                         }
                     }
@@ -139,29 +148,24 @@ include('../server.php');
                 },
                 png: {
                     text: "Export PNG"
-                },
-                svg: {
-                    text: "Export SVG"
-                },
-                csv: {
-                    text: "Export CSV"
                 }
             },
             nodeBinding: {
-                field_0: "name",
-                field_1: "TotalShare"
+                field_0: "description",
+                field_1: "name",
+                html: "html",
             },
             nodes: [{
                     id: -1,
                     pid: null,
                     tags: ["Category"],
-                    name: '<?php
-                            if (empty($_GET)) {
-                                echo "All";
-                            } else {
-                                echo $_GET['cat'];
-                            }
-                            ?>'
+                    description: '<?php
+                                    if (empty($_GET)) {
+                                        echo "All";
+                                    } else {
+                                        echo $_GET['cat'];
+                                    }
+                                    ?>'
                 },
                 <?php
                 $sql = "";
@@ -199,12 +203,11 @@ include('../server.php');
                         id: <?= $row['ID'] ?>,
                         pid: <?= $row['parent_id'] ?>,
                         <?php
-                            if($row['internal_external'] == "External"){
+                            if ($row['internal_external'] == "External") {
                                 echo 'tags: ["Category1"],';
                             }
-                        ?>
-                        name: '<?= $row['company_name'] ?>',
-                        TotalShare: '<?= $row['total_shares'] ?>',
+                            ?>
+                        html: '<div><?= $row['company_name'] ?></div>',
                         Address: '<?= $row['address'] ?>',
                     },
                 <?php
@@ -212,6 +215,9 @@ include('../server.php');
                 ?>
 
             ]
+        });
+        chart.on('exportstart', function(sender, args) {
+            args.content += document.getElementById('myStyles').outerHTML;
         });
     </script>
 </body>

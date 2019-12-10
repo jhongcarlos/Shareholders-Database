@@ -75,7 +75,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                 <th>Type</th>
                                 <th>Type of Share</th>
                                 <th>Shares Owned</th>
-                                <th>Stock Certificate</th>
                                 <th>Action</th>
                             </thead>
                             <tbody>
@@ -101,7 +100,6 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             <td>Individual</td>
                                             <td><?= $arr1[$position] ?></td>
                                             <td><?= $arr2[$position] ?></td>
-                                            <td><input type="button" name="view" value="view" id="<?php echo $row["ID"]; ?>" class="btn btn-primary btn-xs view_data" /></td>
                                             <td><a href="view_shareholder.php?sh_id=<?= $row['ID'] ?>" class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
                                         </tr>
                                     <?php

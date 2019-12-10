@@ -108,7 +108,13 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                                     <label for="f_name">Internal / External</label>
                                     <select name="internal_external" class="form-control" required>
                                         <?php
-                                            if ($row['internal_external'] == "Internal") { ?>
+                                            if ($row['internal_external'] == "") { ?>
+                                            <option value=""></option>
+                                            <option>Internal</option>
+                                            <option>External</option>
+                                        <?php
+
+                                            } elseif ($row['internal_external'] == "Internal") { ?>
                                             <option selected>Internal</option>
                                             <option>External</option>
                                         <?php
@@ -135,11 +141,11 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                                     <div class="row">
                                         <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                             <label for="f_name">Directors/Officers</label>
-                                            <input type="text" name="dir_off[]" class="form-control" required value="">
+                                            <input type="text" name="dir_off[]" class="form-control" value="">
                                         </div>
                                         <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                             <label for='f_name'>Position</label>
-                                            <input type="text" name="do_position[]" class="form-control" required value="">
+                                            <input type="text" name="do_position[]" class="form-control" value="">
                                         </div>
                                     </div>
                                 <?php
@@ -188,7 +194,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                                     <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                         <label for='f_name'>Type of Shares</label>
                                         <!-- <input type="text" name="type_of_shares[]" class="form-control" value="<?= $type_of_share[$i] ?>"> -->
-                                        <select name="type_of_shares[]" class="form-control" required>
+                                        <select name="type_of_shares[]" class="form-control">
                                             <?php
                                                     if ($type_of_share[$i] == "Preferred") { ?>
                                                 <option></option>
@@ -234,6 +240,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script>
         $(document).ready(function() {
             $("#edit_corp_add").click(function() {

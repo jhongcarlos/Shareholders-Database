@@ -118,8 +118,8 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             <tr>
                                                 <td><?= $row['company_name'] ?></td>
                                                 <td>Company</td>
-                                                <td><?= $arr5[$num] ?></td>
-                                                <td><?= $arr4[$num] ?></td>
+                                                <td><?= $arr5[$k] ?></td>
+                                                <td><?= $arr4[$k] ?></td>
                                                 <td><a href='view_company.php?comp_name=<?= $row['company_name'] ?>' class="btn btn-warning"><i class="fa fa-eye"></i></a></td>
                                             </tr>
                                 <?php

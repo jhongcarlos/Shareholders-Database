@@ -72,6 +72,22 @@
         </div>
     </div>
 </div>
+<!-- View directors and officers -->
+<div id="diroff" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Directors and Officers</h4>
+            </div>
+            <div class="modal-body" id="comp_diroff">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- View certificate Corporation -->
 <div id="corpModal" class="modal fade">
     <div class="modal-dialog">
@@ -84,6 +100,83 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- View Attachments individual -->
+<div id="attachments_comp" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Attachments</h4>
+            </div>
+            <div class="modal-body" id="comp_attachments_body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- View Attachments Corporation -->
+<div id="attachments_corp" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Attachments</h4>
+            </div>
+            <div class="modal-body" id="corp_attachments_body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- View directors and officers of corporation -->
+<div id="corp_diroff_modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Directors and Officers</h4>
+            </div>
+            <div class="modal-body" id="corp_diroff">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Rail -->
+<div class="modal fade" id="modal_rail" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Rail</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a target="blank" href="partial/test_chart?cat=Rail&type=Internal" style="float:right">
+                            <button class="btn btn-primary">
+                                Internal
+                            </button>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a target="blank" href="partial/test_chart?cat=Rail&type=External" style="float:left">
+                            <button class="btn btn-primary">
+                                External
+                            </button>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

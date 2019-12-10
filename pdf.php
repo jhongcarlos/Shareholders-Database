@@ -66,8 +66,8 @@ function fetch_data()
         <tr>
           <td>' . $row['ID'] . '</td>
           <td>' . $row['company_name'] . '</td>
-          <td>' . $arr5[$num] . '</td>
-          <td>' . $arr4[$num] . '</td>
+          <td>' . $arr5[$k] . '</td>
+          <td>' . $arr4[$k] . '</td>
         </tr>';
     }
     $num += 1;

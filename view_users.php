@@ -47,7 +47,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                             <th>Full Name</th>
                             <th>Role</th>
                             <th>Email</th>
-                            <th>Company Handled</th>
+                            <th>Category Handled</th>
                             <th>Action</th>
                         </tr>
                     </thead>

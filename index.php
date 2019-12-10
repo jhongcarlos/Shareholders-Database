@@ -91,7 +91,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                             <input type="hidden" name="comp_name" value="<?= $row['company_name']; ?>">
                                             <button class="btn btn-primary" name="comp_view" title="View"><i class="fa fa-eye"></i></button>
                                             <?php
-                                                if ($_SESSION['mpic_mpic_role'] == "Viewer") { } elseif ($_SESSION['mpic_mpic_company'] == $row['company_name'] && $_SESSION['mpic_mpic_role'] == "Site Admin") {
+                                                if ($_SESSION['mpic_mpic_role'] == "Viewer") { } elseif ($_SESSION['mpic_mpic_company'] == $row['category'] && $_SESSION['mpic_mpic_role'] == "Site Admin") {
                                                     ?>
                                                 <button class="btn btn-warning" name="comp_edit" title="Edit"><i class="fa fa-edit"></i></button>
                                                 <button class="btn btn-danger" onclick="return confirmation()" name="comp_delete" title="Delete"><i class="fa fa-trash"></i></button>
@@ -131,8 +131,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                 <th>ID</th>
                                 <th>Corporation Name</th>
                                 <th>Registration</th>
-                                <th>Type of Shares</th>
-                                <th>Shares Owned</th>
+                                <th>Address</th>
                                 <th>Last Update</th>
                                 <th width="20%">Action</th>
                             </tr>
@@ -148,8 +147,7 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                     <td><?= $row['ID'] ?></td>
                                     <td><?= $row['corporation_name'] ?></td>
                                     <td><span><b>SEC Number: </b></span><?= $row['sec_num'] ?><br><span><b>TIN Number: </b></span><?= $row['tin_num'] ?></td>
-                                    <td><?= str_replace(',', '<br />', $row['type_of_share']) ?></td>
-                                    <td class='sss'><?= str_replace('|', '<br>', $row['shares_owned']) ?></td>
+                                    <td><?= $row['address'] ?></td>
                                     <td><?= $row['last_update'] ?></td>
                                     <td>
                                         <form method="POST">
@@ -191,12 +189,11 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Held Position</th>
-                                <th>Shares Owned</th>
-                                <th>Type of Shares</th>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Last Name</th>
                                 <th>Last update</th>
-                                <th width="20%">Action</th>
+                                <th width="25%">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -208,10 +205,9 @@ if (empty($_SESSION['mpic_mpic_name'])) {
                                 ?>
                                 <tr>
                                     <td><?= $row['ID'] ?></td>
-                                    <td><?= $row['first_name'] . ' ' . $row['last_name'] ?></td>
-                                    <td><?= str_replace(',', '<br />', $row['held_position']) ?></td>
-                                    <td><?= str_replace('|', '<br />', $row['shares_owned']) ?></td>
-                                    <td><?= str_replace(',', '<br />', $row['type_of_shares']) ?></td>
+                                    <td><?= $row['first_name'] ?></td>
+                                    <td><?= $row['middle_name'] ?></td>
+                                    <td><?= $row['last_name'] ?></td>
                                     <td><?= $row['last_update'] ?></td>
                                     <td>
                                         <form method="POST">

@@ -1,7 +1,7 @@
 <?php
 include('server.php');
 
-if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] == "Administrator") { } 
+if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] == "Administrator") { }
 // elseif ($_SESSION['mpic_mpic_role'] == "Site Admin" and $comp_id == $_SESSION['edit_id_comp']) { } 
 else {
     header('Location:index');
@@ -50,7 +50,7 @@ else {
                         $stmt = sqlsrv_query($db, $sql);
                         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
 
-                            $company_affiliation = explode(",", $row['company_affiliation']);
+                            $company_affiliation = explode("|", $row['company_affiliation']);
                             $director_officer = explode(",", $row['director_officer']);
                             $do_position = explode(",", $row['do_position']);
                             $shares_owned = explode("|", $row['shares_owned']);
@@ -89,11 +89,11 @@ else {
                                     <div class="row">
                                         <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                             <label for="f_name">Directors/Officers</label>
-                                            <input type="text" name="dir_off[]" class="form-control" required value="">
+                                            <input type="text" name="dir_off[]" class="form-control" value="">
                                         </div>
                                         <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                             <label for='f_name'>Position</label>
-                                            <input type="text" name="do_position[]" class="form-control" required value="">
+                                            <input type="text" name="do_position[]" class="form-control" value="">
                                         </div>
                                     </div>
                                 <?php
@@ -102,11 +102,11 @@ else {
                                     <div class="row">
                                         <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                             <label for="f_name">Directors/Officers</label>
-                                            <input type="text" name="dir_off[]" class="form-control" required value="<?= $director_officer[$i] ?>">
+                                            <input type="text" name="dir_off[]" class="form-control" value="<?= $director_officer[$i] ?>">
                                         </div>
                                         <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                             <label for='f_name'>Position</label>
-                                            <input type="text" name="do_position[]" class="form-control" required value="<?= $do_position[$i] ?>">
+                                            <input type="text" name="do_position[]" class="form-control" value="<?= $do_position[$i] ?>">
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -142,13 +142,19 @@ else {
                                     <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                         <label for='f_name'>Type of Shares</label>
                                         <!-- <input type="text" name="type_of_shares[]" class="form-control" required value="<?= $type_of_share[$i] ?>"> -->
-                                        <select name="type_of_shares[]" class="form-control" required>
+                                        <select name="type_of_shares[]" class="form-control">
                                             <?php
-                                                    if ($type_of_share[$i] == "Common") { ?>
+                                                    if ($type_of_share[$i] == "") { ?>
+                                                <option value=""></option>
+                                                <option>Common</option>
+                                                <option>Preferred</option>
+                                            <?php } elseif ($type_of_share[$i] == "Common") { ?>
+                                                <option value=""></option>
                                                 <option selected>Common</option>
                                                 <option>Preferred</option>
                                             <?php
                                                     } else { ?>
+                                                <option value=""></option>
                                                 <option>Common</option>
                                                 <option selected>Preferred</option>
                                             <?php
@@ -158,7 +164,7 @@ else {
                                     </div>
                                     <div class="col md-6 col-xs-6 col-xl-6 col-sm-6">
                                         <label for="f_name">Shares owned</label>
-                                        <input type="text" name="shares_owned[]" class="form-control" required value="<?= $shares_owned[$i] ?>">
+                                        <input type="text" name="shares_owned[]" class="form-control" value="<?= $shares_owned[$i] ?>">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -181,6 +187,7 @@ else {
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script>
         $(document).ready(function() {
             $("#edit_corp_add").click(function() {

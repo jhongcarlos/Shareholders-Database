@@ -98,7 +98,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                                 <option>External</option>
                             </select>
                         </div>
-                        <label for="f_name">Parent Name *</label>
+                        <label for="f_name">Biggest share *</label>
                         <input class='form-control' list='comp_list_res' name='parent_id' id='comp_list'>
                         <datalist id='comp_list_res'>
                             <?php
@@ -119,9 +119,9 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                             <input type="button" class="add btn btn-success" value="+ Add Registration" id="add" style="margin-top:3px" />
                         </div>
                         <div class="form-group">
-                            <label>Shareholders</label>
+                            <label>Company Affiliations</label>
                             <div id="affiliate"></div>
-                            <input type="button" class="a_add btn btn-success" value="+ Add shareholder" id="a_add" style="margin-top:3px" />
+                            <input type="button" class="a_add btn btn-success" value="+ Add company affiliations" id="a_add" style="margin-top:3px" />
                         </div>
                         <!-- <div class="form-group">
                             <label for="stocks_owned">Stocks Owned</label>
@@ -138,9 +138,9 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
             </div>
         </div>
     </div>
-    <a class="float" data-toggle="modal" data-target="#add_data_Modal">
+    <!-- <a class="float" data-toggle="modal" data-target="#add_data_Modal">
         <i class="fa fa-plus my-float"></i>
-    </a>
+    </a> -->
     <div id="add_data_Modal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -278,7 +278,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                 var type_of_shares = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><select name='type_of_shares[]' class='form-control'><option value='0'>- Type of Share -</option><option>Preferred</option><option>Common</option></select></div>");
                 var shares_owned = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input type='text' name='shares_owned[]' class='form-control' placeholder='Shares Owned'/></div>");
                 var remarks = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><textarea name='remarks[]' cols='15' rows='5' class='form-control' placeholder='Remarks'></textarea><hr></div>");
-                var stocks_certificate = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><span>Stock Certificate</span><input type='file' name='stock_cert[]' class='form-control' placeholder='Stock Certificate'/></div>");
+                var stocks_certificate = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><span>Attachment</span><input type='file' name='stock_cert[]' class='form-control' placeholder='Stock Certificate'/></div>");
                 var removeButton = $("<div class='col-md-2 col-xs-2 col-xl-2 col-sm-2'><button class='btn btn-danger' style='margin-left:2px;'>-</button></div>");
                 removeButton.click(function() {
                     $(this).parent().remove();
@@ -333,7 +333,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                 var removeButton = $("<div class='col-md-2 col-xs-2 col-xl-2 col-sm-2'><button class='btn btn-danger' style='margin-left:2px;'>-</button></div>");
                 var shares_owned = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input type='text' name='shares_owned[]' class='form-control' required placeholder='Shares Owned'/></div>");
                 var type_of_shares = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><select name='type_of_shares[]' class='form-control'><option value='0'>- Type of Share -</option><option>Preferred</option><option>Common</option></select></div>");
-                var stocks_certificate = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><span>Stock Certificate</span><input type='file' name='stock_cert[]' class='form-control' required placeholder='Stock Certificate'/></div>");
+                var stocks_certificate = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><span>Attachment</span><input type='file' name='stock_cert[]' class='form-control' required placeholder='Stock Certificate'/></div>");
                 var remarks = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><textarea name='remarks[]' cols='15' rows='5' class='form-control' placeholder='Remarks'></textarea><hr></div>");
                 removeButton.click(function() {
                     $(this).parent().remove();
@@ -397,7 +397,7 @@ if ($_SESSION['mpic_mpic_role'] == "Super User" || $_SESSION['mpic_mpic_role'] =
                 var type_of_shares = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><select name='type_of_shares[]' class='form-control'><option value='0'>- Type of Share -</option><option>Preferred</option><option>Common</option></select></div>");
                 var shares_owned = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><input type='text' autocomplete='off' name='shares_owned[]' class='form-control' placeholder='Shares Owned'/></div>");
                 var remarks = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><textarea name='remarks[]' cols='15' rows='5' class='form-control' placeholder='Remarks'></textarea><hr></div>");
-                var stocks_certificate = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><span>Stock Certificate</span><input type='file' name='stock_cert[]' class='form-control' placeholder='Stock Certificate'/></div>");
+                var stocks_certificate = $("<div class='col-md-10 col-xs-10 col-xl-10 col-sm-10'><span>Attachment</span><input type='file' name='stock_cert[]' class='form-control' placeholder='Stock Certificate' /></div>");
                 var removeButton = $("<div class='col-md-2 col-xs-2 col-xl-2 col-sm-2'><button class='btn btn-danger' style='margin-left:2px;'>-</button></div>");
                 removeButton.click(function() {
                     $(this).parent().remove();
